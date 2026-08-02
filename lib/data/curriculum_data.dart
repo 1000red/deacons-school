@@ -48,7 +48,9 @@ class CurriculumData {
   static List<YearLevel> yearsOf(Level level) {
     return List.generate(
       level.yearsCount,
-      (i) => YearLevel(id: '${level.id}_y${i + 1}', name: level.yearsCount == 1 ? 'السنة الدراسية' : yearNames[i]),
+      (i) => YearLevel(
+          id: '${level.id}_y${i + 1}',
+          name: level.yearsCount == 1 ? 'السنة الدراسية' : yearNames[i]),
     );
   }
 
@@ -57,6 +59,14 @@ class CurriculumData {
   }
 
   static const subjects = <Subject>[
+    Subject(
+      id: 'notebook',
+      name: 'المذكرة',
+      icon: Icons.description, // يمكنك تغيير الأيقونة حسب رغبتك
+      color: Color(0xFFC2410C), // لون مميز للمذكرة
+      type: SubjectType.notebook,
+      description: 'المذكرة الدراسية الخاصة بالمنهج والتطبيقات.',
+    ),
     Subject(
       id: 'rites',
       name: 'طقس',
@@ -99,14 +109,29 @@ class CurriculumData {
     ),
   ];
 
+  /// مواد المنهج تختلف في التمهيدي: لا توجد مادة قراءة في هذا المستوى.
+  static List<Subject> subjectsFor(NavPath path) {
+    if (path.level.id == 'preparatory') {
+      return subjects.where((subject) => subject.id != 'reading').toList();
+    }
+    return subjects;
+  }
+
   /// دروس/ألحان تجريبية لمادة من نوع media (ألحان أو قبطي).
   static List<MediaLessonItem> mediaLessons(NavPath path) {
     final base = path.subject!.id == 'hymns'
         ? ['لحن أبصالوس', 'لحن آجيوس', 'لحن كيرياليصون الكبير', 'مزمور باكر']
-        : ['حرف الألفا بيتا', 'نطق الحروف المركبة', 'تسبحة نيك إشئنوفري', 'قراءة قبطي مبسطة'];
+        : [
+            'حرف الألفا بيتا',
+            'نطق الحروف المركبة',
+            'تسبحة نيك إشئنوفري',
+            'قراءة قبطي مبسطة'
+          ];
     return List.generate(
       base.length,
-      (i) => MediaLessonItem(title: '${base[i]} (${path.term.name})', duration: '0${2 + i}:${15 + i * 7}'),
+      (i) => MediaLessonItem(
+          title: '${base[i]} (${path.term.name})',
+          duration: '0${2 + i}:${15 + i * 7}'),
     );
   }
 

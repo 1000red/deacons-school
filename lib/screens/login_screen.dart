@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../state/app_state.dart';
 import '../theme/app_theme.dart';
-import 'levels_screen.dart';
+
+import '../navigator.dart';
 
 import '../widgets/custom_text.dart';
 import '../widgets/custom_textfield.dart';
@@ -32,8 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() => _error = 'من فضلك أدخل البريد الإلكتروني وكلمة المرور');
       return;
     }
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const LevelsScreen()));
+    AppNavigation.navigateToLevelScreen(context);
   }
 
   @override
@@ -50,14 +50,22 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const SizedBox(height: 24),
-                  Container(
-                    width: 84,
-                    height: 84,
-                    decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.15),
-                        shape: BoxShape.circle),
-                    child:
-                        const Icon(Icons.church, color: Colors.white, size: 42),
+                  // Container(
+                  //   width: 84,
+                  //   height: 84,
+                  //   decoration: BoxDecoration(
+                  //       color: Colors.white.withValues(alpha: 0.15),
+                  //       shape: BoxShape.circle),
+                  //   child:
+                  //       const Icon(Icons.church, color: Colors.white, size: 42),
+                  // ),
+                  SizedBox(
+                    width: 180,
+                    height: 110,
+                    child: Image.asset(
+                      'assets/logo-removebg-preview.png',
+                      fit: BoxFit.contain,
+                    ),
                   ),
                   const SizedBox(height: 18),
                   const Text(
@@ -68,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const Text(
+                  Text(
                     "سجّل الدخول للمتابعة",
                     style: TextStyle(
                       fontSize: 15.0,

@@ -8,7 +8,7 @@ import 'notebook_subject_screen.dart';
 import '../widgets/custom_appbar.dart';
 import '../widgets/custom_breadcrumb_bar.dart';
 
-/// شاشة عرض المواد الخمس الثابتة لكل ترم: طقس، قبطي، قراءة، محفوظات، ألحان.
+/// شاشة عرض مواد المنهج لكل ترم.
 class SubjectsScreen extends StatelessWidget {
   final NavPath path;
   const SubjectsScreen({super.key, required this.path});
@@ -26,6 +26,7 @@ class SubjectsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final subjects = CurriculumData.subjectsFor(path);
     return Scaffold(
       appBar: appBarFor(path.term.name),
       body: Column(
@@ -34,10 +35,10 @@ class SubjectsScreen extends StatelessWidget {
           Expanded(
             child: ListView.separated(
               padding: const EdgeInsets.all(16),
-              itemCount: CurriculumData.subjects.length,
+              itemCount: subjects.length,
               separatorBuilder: (_, __) => const SizedBox(height: 12),
               itemBuilder: (context, i) {
-                final subject = CurriculumData.subjects[i];
+                final subject = subjects[i];
                 return InkWell(
                   borderRadius: BorderRadius.circular(16),
                   onTap: () => _openSubject(context, subject),

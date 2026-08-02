@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import '../data/curriculum_data.dart';
 import '../models/models.dart';
-import '../state/app_state.dart';
 import '../theme/app_theme.dart';
-import 'login_screen.dart';
 import 'years_screen.dart';
 import 'terms_screen.dart';
 
 import '../widgets/custom_card.dart';
 
-/// الشاشة الرئيسية بعد الدخول: اختيار المستوى الدراسي (تمهيدي/أول/تاني/تالت).
+// الشاشة الرئيسية بعد الدخول: اختيار المستوى الدراسي (تمهيدي/أول/تاني/تالت).
 class LevelsScreen extends StatelessWidget {
   const LevelsScreen({super.key});
 
@@ -24,15 +22,9 @@ class LevelsScreen extends StatelessWidget {
     }
   }
 
-  void _logout(BuildContext context) {
-    AppState.instance.logout();
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => const LoginScreen()), (r) => false);
-  }
-
   @override
   Widget build(BuildContext context) {
-    final user = AppState.instance.currentUser;
+    // final user = AppState.instance.currentUser;
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -40,15 +32,10 @@ class LevelsScreen extends StatelessWidget {
             pinned: true,
             expandedHeight: 150,
             backgroundColor: AppColors.primary,
-            actions: [
-              IconButton(
-                  onPressed: () => _logout(context),
-                  icon: const Icon(Icons.logout))
-            ],
             flexibleSpace: FlexibleSpaceBar(
               titlePadding: const EdgeInsets.only(right: 16, bottom: 14),
-              title:
-                  const Text('مدرسة الشمامسة', style: TextStyle(fontSize: 15)),
+              title: const Text('مدرسة الشمامسة',
+                  style: TextStyle(color: Colors.white70, fontSize: 15)),
               background: Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
@@ -57,14 +44,13 @@ class LevelsScreen extends StatelessWidget {
                     colors: [AppColors.primary, AppColors.primaryDark],
                   ),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 60, 20, 0),
+                child: const Padding(
+                  padding: EdgeInsets.fromLTRB(20, 60, 20, 0),
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: Text(
-                      'أهلاً بيك يا ${user?.name ?? "شماس"} 👋',
-                      style:
-                          const TextStyle(color: Colors.white70, fontSize: 13),
+                      'أهلاً بيك 👋',
+                      style: TextStyle(color: Colors.white70, fontSize: 13),
                     ),
                   ),
                 ),
@@ -95,7 +81,7 @@ class LevelsScreen extends StatelessWidget {
                     crossAxisSpacing: 14,
                     childAspectRatio: 0.95,
                     children: CurriculumData.levels
-                        .map((level) => NavCard(
+                        .map((level) => CustomCard(
                               title: level.name,
                               subtitle: level.subtitle,
                               icon: level.icon,
