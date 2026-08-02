@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter/material.dart';
-
 /// بطاقة تُستخدم لعرض مستوى / سنة / ترم / مادة في قوائم التنقل.
 /// لو [filled] = true: كارت بتدرج لوني بارز (يُستخدم للعنصر الرئيسي).
 /// لو [filled] = false: كارت أبيض بحدود خفيفة (يُستخدم للعناصر الفرعية).

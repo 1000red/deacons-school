@@ -23,7 +23,8 @@ class DeaconsSchoolApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      builder: (context, child) => Directionality(textDirection: TextDirection.rtl, child: child!),
+      builder: (context, child) =>
+          Directionality(textDirection: TextDirection.rtl, child: child!),
       home: const LoginScreen(),
     );
   }

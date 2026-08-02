@@ -65,6 +65,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Image.asset(
                       'assets/logo-removebg-preview.png',
                       fit: BoxFit.contain,
+                      errorBuilder: (_, __, ___) => const Icon(
+                        Icons.church,
+                        color: Colors.white,
+                        size: 64,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 18),
@@ -76,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text(
+                  const Text(
                     "سجّل الدخول للمتابعة",
                     style: TextStyle(
                       fontSize: 15.0,

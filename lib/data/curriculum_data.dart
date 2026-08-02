@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import '../models/models.dart';
 
-/// بيانات المنهج الدراسي: المستويات، السنوات، الترمات، والمواد الخمس الثابتة.
-/// المحتوى داخل كل مادة (الدروس/الألحان) يُولَّد بشكل تجريبي بناءً على السياق
-/// (المستوى/السنة/الترم) حتى لا نحتاج لتخزين مئات التركيبات يدويًا.
+/// بيانات المنهج الدراسي: المستويات، السنوات، الترمات، والمواد الثابتة.
+///
+/// أسماء المواد ثابتة في الغالب، لكن محتوى كل مادة يتبع مساراً كاملاً
+/// (مستوى > سنة > ترم > مادة). لا نربط الدروس باسم المادة فقط حتى لا يظهر
+/// منهج ترم في ترم آخر.
 class CurriculumData {
   CurriculumData._();
 
@@ -109,6 +111,70 @@ class CurriculumData {
     ),
   ];
 
+  /// تُحفظ بيانات كل منهج تحت مفتاح [NavPath.curriculumKey].
+  ///
+  /// هذا مثال فعلي لمنهج «المستوى الأول / السنة الثانية / قبطي»؛ كل ترم له
+  /// قائمة مستقلة، ولذلك تعديل منهج الترم الثالث لا يؤثر على الترم الثاني.
+  /// عند إضافة محتوى جديد، نضيفه للمفتاح المطابق فقط.
+  static const _mediaCurricula = <String, List<MediaLessonItem>>{
+    'first/first_y2/t1/coptic': [
+      MediaLessonItem(title: 'الحروف القبطية الأساسية', duration: '03:10'),
+      MediaLessonItem(title: 'نطق الحروف المتحركة', duration: '04:25'),
+    ],
+    'first/first_y2/t2/coptic': [
+      MediaLessonItem(title: 'الحروف المركبة', duration: '04:05'),
+      MediaLessonItem(title: 'كلمات قبطية قصيرة', duration: '03:40'),
+      MediaLessonItem(title: 'تدريب على القراءة', duration: '05:15'),
+    ],
+    'first/first_y2/t3/coptic': [
+      MediaLessonItem(title: 'قراءة نص قبطي مبسط', duration: '05:20'),
+      MediaLessonItem(title: 'تسبحة نيك إشئنوفري', duration: '06:10'),
+      MediaLessonItem(title: 'مراجعة النطق والقراءة', duration: '04:45'),
+    ],
+  };
+
+  static const _notebookCurricula = <String, List<NotebookLessonItem>>{
+    'first/first_y2/t1/rites': [
+      NotebookLessonItem(
+        title: 'مقدمة في طقس رفع بخور عشية',
+        notebookPages: 3,
+        content:
+            'شرح ترتيب رفع بخور عشية والتدريبات المطلوبة خلال الترم الأول.',
+      ),
+    ],
+    'first/first_y2/t2/rites': [
+      NotebookLessonItem(
+        title: 'أواني وملابس الخدمة',
+        notebookPages: 4,
+        content: 'دراسة أواني الخدمة وملابس الشماس والتطبيق العملي عليها.',
+      ),
+    ],
+    'first/first_y2/t3/rites': [
+      NotebookLessonItem(
+        title: 'ترتيب القداس الإلهي',
+        notebookPages: 5,
+        content: 'منهج الترم الثالث: ترتيب القداس الإلهي ومسؤوليات الشماس فيه.',
+      ),
+    ],
+  };
+
+  /// ملفات مذكرات كاملة مرتبطة بمنهج محدد، وليست بالمادة وحدها (asset محلي).
+  static const _notebookPdfAssets = <String, String>{
+    'third/third_y3/t3/notebook':
+        'assets/pdfs/level_3_year_3_term_3_notebook.pdf',
+  };
+
+  /// روابط مذكرات PDF مرفوعة على Google Drive، بنفس نظام المفاتيح المستخدم
+  /// في [_notebookPdfAssets] (curriculumKey الكامل: مستوى/سنة/ترم/مادة).
+  /// استخدم الـ FILE_ID بس (اللي بين /d/ و /view في رابط المشاركة)، مش
+  /// اللينك كامل.
+  static const _notebookPdfDriveIds = <String, String>{
+    'third/third_y3/t3/notebook': '1FNSlqj0xoRu7nhyJx9HW7Sjh2HD_UpK-',
+
+    // مثال لإضافة مذكرة تانية بعدين:
+    // 'first/first_y2/t1/rites': 'FILE_ID_بتاع_مذكرة_الطقس',
+  };
+
   /// مواد المنهج تختلف في التمهيدي: لا توجد مادة قراءة في هذا المستوى.
   static List<Subject> subjectsFor(NavPath path) {
     if (path.level.id == 'preparatory') {
@@ -117,8 +183,15 @@ class CurriculumData {
     return subjects;
   }
 
-  /// دروس/ألحان تجريبية لمادة من نوع media (ألحان أو قبطي).
+  /// دروس/ألحان مادة من نوع media (ألحان أو قبطي).
+  ///
+  /// القوائم المضافة إلى [_mediaCurricula] لها أولوية كاملة لأنها منهج محدد
+  /// لسنة وترم بعينهما. المحتوى الافتراضي التالي موجود مؤقتاً للشاشات التي
+  /// لم يُدخل منهجها بعد في كتالوج البيانات.
   static List<MediaLessonItem> mediaLessons(NavPath path) {
+    final curriculum = _mediaCurricula[path.curriculumKey];
+    if (curriculum != null) return curriculum;
+
     final base = path.subject!.id == 'hymns'
         ? ['لحن أبصالوس', 'لحن آجيوس', 'لحن كيرياليصون الكبير', 'مزمور باكر']
         : [
@@ -135,8 +208,12 @@ class CurriculumData {
     );
   }
 
-  /// دروس تجريبية لمادة من نوع notebook (طقس/قراءة/محفوظات) - مذكرة + محتوى.
+  /// دروس مادة من نوع notebook (طقس/قراءة/محفوظات).
+  /// راجع [mediaLessons] لطريقة حفظ المناهج المنفصلة حسب السنة والترم.
   static List<NotebookLessonItem> notebookLessons(NavPath path) {
+    final curriculum = _notebookCurricula[path.curriculumKey];
+    if (curriculum != null) return curriculum;
+
     final subject = path.subject!;
     final samples = switch (subject.id) {
       'rites' => [
@@ -166,5 +243,17 @@ class CurriculumData {
             'ويشمل الشرح والتوجيهات الخاصة بهذا الدرس.',
       ),
     );
+  }
+
+  /// مسار ملف الـ PDF للمذكرة إن كان قد رُفع لهذا المنهج (asset محلي).
+  static String? notebookPdfAsset(NavPath path) =>
+      _notebookPdfAssets[path.curriculumKey];
+
+  /// رابط تحميل مباشر من Google Drive لمذكرة هذا المنهج، أو null لو
+  /// المفتاح مش موجود في [_notebookPdfDriveIds].
+  static String? notebookPdfUrl(NavPath path) {
+    final fileId = _notebookPdfDriveIds[path.curriculumKey];
+    if (fileId == null) return null;
+    return 'https://drive.google.com/uc?export=download&id=$fileId';
   }
 }

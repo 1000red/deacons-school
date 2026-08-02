@@ -62,8 +62,11 @@ class Term {
   const Term({required this.id, required this.name});
 }
 
-/// مسار التنقل الحالي (مستوى > سنة > ترم > مادة) - يُستخدم لعرض الـ breadcrumb
-/// ولتوليد محتوى تجريبي مناسب للسياق.
+/// مسار التنقل الحالي (مستوى > سنة > ترم > مادة).
+///
+/// لا يكفي معرّف المادة وحده لتحديد المنهج: مادة «قبطي» في كل سنة أو ترم
+/// يمكن أن تحتوي دروساً مختلفة تماماً. لذلك [curriculumKey] هو معرّف المنهج
+/// الفريد الذي تستخدمه طبقة البيانات عند جلب الدروس والملفات.
 class NavPath {
   final Level level;
   final YearLevel? year;
@@ -78,6 +81,13 @@ class NavPath {
     final parts = <String>[level.name, if (year != null) year!.name, term.name, if (subject != null) subject!.name];
     return parts.join(' • ');
   }
+
+  String get curriculumKey => [
+        level.id,
+        year?.id ?? 'no_year',
+        term.id,
+        subject?.id ?? 'no_subject',
+      ].join('/');
 }
 
 /// عنصر لحن/تسبحة قبطي (مادة من نوع media): صوت + صورة مذكرة + صورة سبورة بالهزات.
