@@ -2,34 +2,29 @@ import 'package:flutter/material.dart';
 import '../data/curriculum_data.dart';
 import '../models/models.dart';
 import '../theme/app_theme.dart';
-import 'years_screen.dart';
-import 'terms_screen.dart';
+
+import '../navigator.dart';
 
 import '../widgets/custom_card.dart';
 
-// الشاشة الرئيسية بعد الدخول: اختيار المستوى الدراسي (تمهيدي/أول/تاني/تالت).
 class LevelsScreen extends StatelessWidget {
   const LevelsScreen({super.key});
 
   void _openLevel(BuildContext context, Level level) {
     if (level.yearsCount == 1) {
       final year = CurriculumData.yearsOf(level).first;
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (_) => TermsScreen(level: level, year: year)));
+      AppNavigation.navigateToTermsScreen(context, level, year);
     } else {
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (_) => YearsScreen(level: level)));
+      AppNavigation.navigateToYearsScreen(context, level);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // final user = AppState.instance.currentUser;
     return Scaffold(
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            pinned: true,
             expandedHeight: 150,
             backgroundColor: AppColors.primary,
             flexibleSpace: FlexibleSpaceBar(

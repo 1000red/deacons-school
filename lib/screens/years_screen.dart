@@ -5,10 +5,8 @@ import 'subjects_screen.dart';
 
 import '../widgets/custom_appbar.dart';
 import '../widgets/custom_breadcrumb_bar.dart';
-import '../widgets/custom_card.dart';
+import '../widgets/custom_list.dart';
 
-/// شاشة اختيار السنة الدراسية داخل مستوى معيّن (3 سنين).
-/// لما تدوس على سنة، بتتفتح تحتها الترمات مباشرة من غير ما تنقل لشاشة تانية.
 class YearsScreen extends StatefulWidget {
   final Level level;
   const YearsScreen({super.key, required this.level});
@@ -43,11 +41,12 @@ class _YearsScreenState extends State<YearsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      NavCard(
+                      CustomList(
                         title: year.name,
                         subtitle: 'المستوى: ${widget.level.name}',
                         icon: Icons.calendar_month,
                         color: widget.level.color,
+                        isExpanded: isExpanded,
                         onTap: () {
                           setState(() {
                             _expandedYearIndex = isExpanded ? null : i;
@@ -83,7 +82,7 @@ class _YearsScreenState extends State<YearsScreen> {
                                     return Padding(
                                       padding:
                                           const EdgeInsets.only(bottom: 10),
-                                      child: NavCard(
+                                      child: CustomList(
                                         title: term.name,
                                         subtitle: 'يحتوي على 5 مواد دراسية',
                                         icon: Icons.menu_book,

@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import '../models/models.dart';
 
-/// حالة تسجيل الدخول والمستخدم الحالي - محاكاة محلية بدون أي اتصال بسيرفر.
 class AppState extends ChangeNotifier {
   AppState._internal();
   static final AppState instance = AppState._internal();
@@ -10,13 +9,21 @@ class AppState extends ChangeNotifier {
   AppUser? get currentUser => _currentUser;
   bool get isLoggedIn => _currentUser != null;
 
-  /// تسجيل دخول وهمي: أي بريد وكلمة مرور غير فارغين يسمحان بالدخول.
-  bool login(String email, String password) {
-    if (email.trim().isEmpty || password.trim().isEmpty) return false;
-    final name = email.split('@').first;
-    _currentUser = AppUser(name: name.isEmpty ? 'شماس' : name, email: email.trim());
+  String login(String email, String password) {
+    if (email.trim().isEmpty || password.trim().isEmpty) {
+      return 'من فضلك أدخل البريد الإلكتروني وكلمة المرور';
+    }
+
+    if (!email.contains('@')) {
+      return 'من فضلك أدخل بريدًا إلكترونيًا صحيحًا';
+    }
+
+    if (email.trim() != "deacon@church.com" || password.trim() != "123456") {
+      return 'خطأ في البريد الإلكتروني أو كلمة المرور';
+    }
+
     notifyListeners();
-    return true;
+    return '';
   }
 
   void logout() {

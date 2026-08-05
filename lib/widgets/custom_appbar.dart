@@ -25,7 +25,6 @@ class AppBadge extends StatelessWidget {
   }
 }
 
-/// شريط علوي موحّد للشاشات الداخلية.
 PreferredSizeWidget appBarFor(String title, {List<Widget>? actions}) {
   return AppBar(title: Text(title), actions: actions);
 }

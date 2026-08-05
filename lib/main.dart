@@ -17,7 +17,7 @@ class DeaconsSchoolApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.theme,
       locale: const Locale('ar'),
-      supportedLocales: const [Locale('ar'), Locale('en')],
+      supportedLocales: const [Locale('ar')],
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,

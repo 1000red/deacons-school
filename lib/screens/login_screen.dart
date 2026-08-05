@@ -28,9 +28,12 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _submit() {
-    final ok = AppState.instance.login(_emailCtrl.text, _passCtrl.text);
-    if (!ok) {
-      setState(() => _error = 'من فضلك أدخل البريد الإلكتروني وكلمة المرور');
+    final error = AppState.instance.login(
+      _emailCtrl.text,
+      _passCtrl.text,
+    );
+    if (error.isNotEmpty) {
+      setState(() => _error = error);
       return;
     }
     AppNavigation.navigateToLevelScreen(context);
@@ -50,26 +53,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const SizedBox(height: 24),
-                  // Container(
-                  //   width: 84,
-                  //   height: 84,
-                  //   decoration: BoxDecoration(
-                  //       color: Colors.white.withValues(alpha: 0.15),
-                  //       shape: BoxShape.circle),
-                  //   child:
-                  //       const Icon(Icons.church, color: Colors.white, size: 42),
-                  // ),
                   SizedBox(
                     width: 180,
                     height: 110,
                     child: Image.asset(
                       'assets/logo-removebg-preview.png',
                       fit: BoxFit.contain,
-                      errorBuilder: (_, __, ___) => const Icon(
-                        Icons.church,
-                        color: Colors.white,
-                        size: 64,
-                      ),
                     ),
                   ),
                   const SizedBox(height: 18),
@@ -123,17 +112,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           text: "اسم المستخدم / البريد الإلكتروني"),
                       const SizedBox(height: 8.0),
                       CustomTextFeld(
-                        text: "أدخل اسم المستخدم",
-                        icon: Icons.person_2_outlined,
                         controller: _emailCtrl,
                       ),
                       const SizedBox(height: 25.0),
                       const CustomText(text: "كلمة المرور"),
                       const SizedBox(height: 8.0),
                       CustomTextPass(
-                        text: "أدخل كلمة المرور",
-                        icon: Icons.lock_outline_rounded,
-                        fixIcon: Icons.visibility_outlined,
                         controller: _passCtrl,
                       ),
                       if (_error != null) ...[

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-/// المستخدم الحالي (تسجيل دخول وهمي محليًا - بدون اتصال بسيرفر).
 class AppUser {
-  final String name;
   final String email;
+  final String name;
   const AppUser({required this.name, required this.email});
 }
 
-/// نوع المادة: مواد "بالصوت والصورة" (ألحان + قبطي) مقابل مواد "مذكرة + محتوى".
-enum SubjectType { media, notebook }
+enum SubjectType {
+  media, // PDF + Audio
+  notebook, // PDF
+}
 
-/// مادة دراسية ثابتة (5 مواد لكل تيرم).
 class Subject {
   final String id;
   final String name;
@@ -29,14 +29,13 @@ class Subject {
   });
 }
 
-/// مستوى دراسي (تمهيدي / أول / تاني / تالت).
 class Level {
   final String id;
   final String name;
   final String subtitle;
   final IconData icon;
   final Color color;
-  final int yearsCount; // 1 للتمهيدي، 3 لباقي المستويات
+  final int yearsCount;
 
   const Level({
     required this.id,
@@ -48,37 +47,37 @@ class Level {
   });
 }
 
-/// سنة دراسية داخل مستوى معين.
 class YearLevel {
   final String id;
   final String name;
   const YearLevel({required this.id, required this.name});
 }
 
-/// ترم دراسي (3 ترمات لكل سنة).
 class Term {
   final String id;
   final String name;
   const Term({required this.id, required this.name});
 }
 
-/// مسار التنقل الحالي (مستوى > سنة > ترم > مادة).
-///
-/// لا يكفي معرّف المادة وحده لتحديد المنهج: مادة «قبطي» في كل سنة أو ترم
-/// يمكن أن تحتوي دروساً مختلفة تماماً. لذلك [curriculumKey] هو معرّف المنهج
-/// الفريد الذي تستخدمه طبقة البيانات عند جلب الدروس والملفات.
 class NavPath {
   final Level level;
   final YearLevel? year;
   final Term term;
   final Subject? subject;
 
-  const NavPath({required this.level, this.year, required this.term, this.subject});
+  const NavPath(
+      {required this.level, this.year, required this.term, this.subject});
 
-  NavPath copyWith({Subject? subject}) => NavPath(level: level, year: year, term: term, subject: subject ?? this.subject);
+  NavPath copyWith({Subject? subject}) => NavPath(
+      level: level, year: year, term: term, subject: subject ?? this.subject);
 
   String get breadcrumb {
-    final parts = <String>[level.name, if (year != null) year!.name, term.name, if (subject != null) subject!.name];
+    final parts = <String>[
+      level.name,
+      if (year != null) year!.name,
+      term.name,
+      if (subject != null) subject!.name
+    ];
     return parts.join(' • ');
   }
 
@@ -90,10 +89,9 @@ class NavPath {
       ].join('/');
 }
 
-/// عنصر لحن/تسبحة قبطي (مادة من نوع media): صوت + صورة مذكرة + صورة سبورة بالهزات.
 class MediaLessonItem {
   final String title;
-  final String duration; // مثال: 03:45 (بيانات تجريبية للعرض)
+  final String duration;
   final bool hasAudio;
   final bool hasNotebookImage;
   final bool hasBoardImage;
@@ -107,11 +105,13 @@ class MediaLessonItem {
   });
 }
 
-/// وحدة محتوى لمادة من نوع "مذكرة" (طقس / قراءة / محفوظات).
 class NotebookLessonItem {
   final String title;
   final String content;
   final int notebookPages;
 
-  const NotebookLessonItem({required this.title, required this.content, required this.notebookPages});
+  const NotebookLessonItem(
+      {required this.title,
+      required this.content,
+      required this.notebookPages});
 }
