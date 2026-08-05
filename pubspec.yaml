@@ -17,11 +17,19 @@ dependencies:
   flutter_pdfview: ^1.4.4
   file_saver: ^0.3.1
   path_provider: ^2.1.5
+  audioplayers: ^6.1.0
+  dio: ^5.9.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
+  flutter_launcher_icons: ^0.14.4
+
+flutter_launcher_icons:
+  android: true
+  # ios: true
+  image_path: "assets/logo-removebg-preview.png"
 
 flutter:
   uses-material-design: true

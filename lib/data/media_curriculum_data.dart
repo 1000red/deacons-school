@@ -40,4 +40,45 @@ class MediaCurriculumData {
           duration: '0${2 + i}:${15 + i * 7}'),
     );
   }
+
+  // ============================================================
+  // صورة السبورة (asset محلي) + رابط الصوت (Google Drive)
+  // كل درس (بمكانه/index في القايمة) ليه صورة وصوت خاصين بيه،
+  // مش نفس المحتوى بيتكرر لكل الدروس تحت نفس المسار.
+  //
+  // شكل المفتاح: curriculumKey -> { lessonIndex: value }
+  // ============================================================
+
+  /// مسار صورة السبورة (asset) لكل درس، حسب ترتيبه في القايمة.
+  static const _boardImageAssets = <String, Map<int, String>>{
+    'third/third_y3/t3/hymns': {
+      0: 'assets/la7n.jpeg', // لحن أبصالوس (الترم الثالث)
+      // 1: 'assets/....jpeg', // لحن آجيوس — لسه محتاج صورة/ملف خاص بيه
+      // 2: 'assets/....jpeg', // لحن كيرياليصون الكبير
+      // 3: 'assets/....jpeg', // مزمور باكر
+    },
+  };
+
+  /// الـ File ID الخاص بملف الصوت على Google Drive لكل درس.
+  static const _audioIds = <String, Map<int, String>>{
+    'third/third_y3/t3/hymns': {
+      0: '1l7z0BFDn_RC4Ocj6Roouxq7uQY1UXYon', // لحن أبصالوس (الترم الثالث)
+      // 1: '....', // لحن آجيوس — لسه محتاج ملف صوت خاص بيه
+      // 2: '....', // لحن كيرياليصون الكبير
+      // 3: '....', // مزمور باكر
+    },
+  };
+
+  /// إرجاع مسار صورة السبورة (asset) الخاصة بدرس معيّن، أو null لو مفيش.
+  static String? boardImageAssetFor(NavPath path, int lessonIndex) {
+    return _boardImageAssets[path.curriculumKey]?[lessonIndex];
+  }
+
+  /// إرجاع رابط تنزيل الصوت المباشر من Google Drive الخاص بدرس معيّن،
+  /// أو null لو مفيش.
+  static String? audioUrlFor(NavPath path, int lessonIndex) {
+    final fileId = _audioIds[path.curriculumKey]?[lessonIndex];
+    if (fileId == null) return null;
+    return 'https://drive.google.com/uc?export=download&id=$fileId';
+  }
 }
