@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../models/models.dart';
+import '../theme/app_theme.dart';
+
 class CustomCard extends StatelessWidget {
   final String title;
   final String? subtitle;
@@ -78,6 +81,80 @@ class CustomCard extends StatelessWidget {
             ],
           ],
         ),
+      ),
+    );
+  }
+}
+
+class LessonCard extends StatelessWidget {
+  final Subject subject;
+  final NotebookLessonItem lesson;
+
+  const LessonCard({
+    super.key,
+    required this.subject,
+    required this.lesson,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: subject.color.withValues(alpha: 0.18),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: subject.color.withValues(alpha: 0.10),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(
+                  subject.icon,
+                  color: subject.color,
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  lesson.title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    height: 1.4,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          Divider(
+            color: subject.color.withValues(alpha: 0.12),
+            height: 1,
+          ),
+          const SizedBox(height: 14),
+          Text(
+            lesson.content,
+            textAlign: TextAlign.start,
+            style: const TextStyle(
+              fontSize: 14,
+              height: 1.8,
+              color: AppColors.textSecondary,
+            ),
+          ),
+        ],
       ),
     );
   }

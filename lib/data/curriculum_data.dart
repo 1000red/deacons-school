@@ -24,7 +24,7 @@ class CurriculumData {
   static List<MediaLessonItem> mediaLessons(NavPath path) =>
       MediaCurriculumData.lessons(path);
 
-  static List<NotebookLessonItem> notebookLessons(NavPath path) =>
+  static Future<List<NotebookLessonItem>> notebookLessons(NavPath path) =>
       NotebookCurriculumData.lessons(path);
 
   static String? notebookPdfUrl(NavPath path) => NotebookPdfData.driveUrl(path);
