@@ -99,39 +99,40 @@ class _LoginScreenState extends State<LoginScreen> {
                   top: 35.0,
                 ),
                 child: SingleChildScrollView(
-                  keyboardDismissBehavior:
-                      ScrollViewKeyboardDismissBehavior.onDrag,
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const CustomText(
-                            text: "اسم المستخدم / البريد الإلكتروني"),
-                        const SizedBox(height: 8.0),
-                        CustomTextFeld(
-                          controller: _emailCtrl,
-                        ),
-                        const SizedBox(height: 25.0),
-                        const CustomText(text: "كلمة المرور"),
-                        const SizedBox(height: 8.0),
-                        CustomTextPass(
-                          controller: _passCtrl,
-                        ),
-                        if (_error != null) ...[
-                          const SizedBox(height: 10.0),
-                          Text(
-                            _error!,
-                            style: const TextStyle(
-                              color: Colors.red,
-                              fontSize: 12.5,
-                            ),
+                  padding: EdgeInsets.only(
+                    left: 25.0,
+                    right: 25.0,
+                    top: 35.0,
+                    bottom: MediaQuery.of(context).viewInsets.bottom + 20.0,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const CustomText(
+                          text: "اسم المستخدم / البريد الإلكتروني"),
+                      const SizedBox(height: 8.0),
+                      CustomTextFeld(
+                        controller: _emailCtrl,
+                      ),
+                      const SizedBox(height: 25.0),
+                      const CustomText(text: "كلمة المرور"),
+                      const SizedBox(height: 8.0),
+                      CustomTextPass(
+                        controller: _passCtrl,
+                      ),
+                      if (_error != null) ...[
+                        const SizedBox(height: 10.0),
+                        Text(
+                          _error!,
+                          style: const TextStyle(
+                            color: Colors.red,
+                            fontSize: 12.5,
                           ),
-                        ],
-                        const SizedBox(height: 35.0),
-                        CustomButton(text: 'تسجيل الدخول', onPressed: _submit),
+                        ),
                       ],
-                    ),
+                      const SizedBox(height: 35.0),
+                      CustomButton(text: 'تسجيل الدخول', onPressed: _submit),
+                    ],
                   ),
                 ),
               ),

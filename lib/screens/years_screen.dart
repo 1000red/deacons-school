@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import '../data/curriculum_data.dart';
 import '../models/models.dart';
-
-import '../navigator.dart';
+import 'subjects_screen.dart';
 
 import '../widgets/custom_appbar.dart';
-// import '../widgets/custom_breadcrumb_bar.dart';
+import '../widgets/custom_breadcrumb_bar.dart';
 import '../widgets/custom_list.dart';
 
 class YearsScreen extends StatefulWidget {
@@ -28,7 +27,7 @@ class _YearsScreenState extends State<YearsScreen> {
       appBar: appBarFor(widget.level.name),
       body: Column(
         children: [
-          // BreadcrumbBar(text: widget.level.name),
+          BreadcrumbBar(text: widget.level.name),
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.all(16),
@@ -44,7 +43,7 @@ class _YearsScreenState extends State<YearsScreen> {
                     children: [
                       CustomList(
                         title: year.name,
-                        subtitle: widget.level.name,
+                        subtitle: 'المستوى: ${widget.level.name}',
                         icon: Icons.calendar_month,
                         color: widget.level.color,
                         isExpanded: isExpanded,
@@ -64,7 +63,8 @@ class _YearsScreenState extends State<YearsScreen> {
                                 decoration: BoxDecoration(
                                   border: Border(
                                     right: BorderSide(
-                                      color: widget.level.color,
+                                      color: widget.level.color
+                                          .withValues(alpha: 0.35),
                                       width: 3,
                                     ),
                                   ),
@@ -88,9 +88,12 @@ class _YearsScreenState extends State<YearsScreen> {
                                         icon: Icons.menu_book,
                                         color: widget.level.color,
                                         filled: false,
-                                        onTap: () => AppNavigation
-                                            .navigateToSubjectsScreen(
-                                                context, path),
+                                        onTap: () => Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (_) =>
+                                                SubjectsScreen(path: path),
+                                          ),
+                                        ),
                                       ),
                                     );
                                   }),

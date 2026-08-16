@@ -19,6 +19,31 @@ class MediaCurriculumData {
       MediaLessonItem(title: 'تسبحة نيك إشئنوفري', duration: '06:10'),
       MediaLessonItem(title: 'مراجعة النطق والقراءة', duration: '04:45'),
     ],
+    'third/third_y3/t3/hymns': [
+      // 0: مرتبط بالصورة/الصوت الموجودين مسبقًا في _boardImageAssets و_audioIds.
+      MediaLessonItem(title: 'لحن مقدمة الإبركسيس السنوي', duration: '05:00'),
+      MediaLessonItem(
+          title: 'تسبحة الثالثة فتية – الهوس الثالث', duration: '06:30'),
+      MediaLessonItem(
+          title: 'لحن إسمو إبتشويس / إبصالية واطس الثالثة فتية',
+          duration: '05:45'),
+      MediaLessonItem(
+          title: 'لحن التوزيع: أويك إنتي إبونخ (خبز الحياة)',
+          duration: '04:20'),
+      MediaLessonItem(
+          title: 'لحن الشفاعات (تين شو أوفوه تينتوفح)', duration: '05:10'),
+    ],
+    'third/third_y3/t3/coptic': [
+      // هذا الجزء من المذكرة (القبطي) صفحاته عملية/تطبيقية بدون نص أو صوت
+      // قابل للاستخراج من الـ PDF؛ سيُستكمل بمحتوى صوتي فعلي لاحقًا.
+      MediaLessonItem(
+        title: 'ثالثًا: القبطي',
+        duration: '--:--',
+        hasAudio: false,
+        hasNotebookImage: false,
+        hasBoardImage: false,
+      ),
+    ],
   };
 
   static List<MediaLessonItem> lessons(NavPath path) {
@@ -52,20 +77,22 @@ class MediaCurriculumData {
   /// مسار صورة السبورة (asset) لكل درس، حسب ترتيبه في القايمة.
   static const _boardImageAssets = <String, Map<int, String>>{
     'third/third_y3/t3/hymns': {
-      0: 'assets/la7n.jpeg', // لحن أبصالوس (الترم الثالث)
-      // 1: 'assets/....jpeg', // لحن آجيوس — لسه محتاج صورة/ملف خاص بيه
-      // 2: 'assets/....jpeg', // لحن كيرياليصون الكبير
-      // 3: 'assets/....jpeg', // مزمور باكر
+      0: 'assets/la7n.jpeg', // لحن مقدمة الإبركسيس السنوي
+      // 1: 'assets/....jpeg', // تسبحة الثالثة فتية – لسه محتاج صورة/ملف خاص بيه
+      // 2: 'assets/....jpeg', // لحن إسمو إبتشويس / إبصالية واطس الثالثة فتية
+      // 3: 'assets/....jpeg', // لحن التوزيع: أويك إنتي إبونخ
+      // 4: 'assets/....jpeg', // لحن الشفاعات
     },
   };
 
   /// الـ File ID الخاص بملف الصوت على Google Drive لكل درس.
   static const _audioIds = <String, Map<int, String>>{
     'third/third_y3/t3/hymns': {
-      0: '1l7z0BFDn_RC4Ocj6Roouxq7uQY1UXYon', // لحن أبصالوس (الترم الثالث)
-      // 1: '....', // لحن آجيوس — لسه محتاج ملف صوت خاص بيه
-      // 2: '....', // لحن كيرياليصون الكبير
-      // 3: '....', // مزمور باكر
+      0: '1l7z0BFDn_RC4Ocj6Roouxq7uQY1UXYon', // لحن مقدمة الإبركسيس السنوي
+      // 1: '....', // تسبحة الثالثة فتية – لسه محتاج ملف صوت خاص بيه
+      // 2: '....', // لحن إسمو إبتشويس / إبصالية واطس الثالثة فتية
+      // 3: '....', // لحن التوزيع: أويك إنتي إبونخ
+      // 4: '....', // لحن الشفاعات
     },
   };
 

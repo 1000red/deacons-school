@@ -83,7 +83,7 @@ class SubjectsScreen extends StatelessWidget {
                                   AppBadge(
                                     label: subject.type == SubjectType.media
                                         ? 'صوت + صور'
-                                        : 'مذكرة + محتوى',
+                                        : 'محتوى',
                                     background:
                                         subject.color.withValues(alpha: 0.12),
                                     foreground: subject.color,

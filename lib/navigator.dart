@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'screens/levels_screen.dart';
 import 'screens/years_screen.dart';
 import 'screens/terms_screen.dart';
-import 'screens/subjects_screen.dart';
 
 class AppNavigation {
   static void navigateToLevelScreen(BuildContext context) {
@@ -23,13 +22,5 @@ class AppNavigation {
       BuildContext context, Level level, final year) {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (_) => TermsScreen(level: level, year: year)));
-  }
-
-  static void navigateToSubjectsScreen(BuildContext context, NavPath path) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => SubjectsScreen(path: path),
-      ),
-    );
   }
 }
