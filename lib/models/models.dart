@@ -9,6 +9,7 @@ class AppUser {
 enum SubjectType {
   media, // PDF + Audio
   notebook, // PDF
+  text, //text from json
 }
 
 class Subject {

@@ -18,7 +18,7 @@ class CurriculumSubjects {
       name: 'طقس',
       icon: Icons.church,
       color: Color(0xFF1D4ED8),
-      type: SubjectType.notebook,
+      type: SubjectType.text,
       description: 'ترتيب وطقوس الكنيسة والقداسات والمواسم الكنسية.',
     ),
     Subject(
@@ -26,7 +26,7 @@ class CurriculumSubjects {
       name: 'قبطي',
       icon: Icons.menu_book_rounded,
       color: Color(0xFF0F766E),
-      type: SubjectType.media,
+      type: SubjectType.text,
       description: 'اللغة القبطية: نطق وتسبحة بالصوت مع صور المذكرة والسبورة.',
     ),
     Subject(
@@ -34,7 +34,7 @@ class CurriculumSubjects {
       name: 'قراءة',
       icon: Icons.auto_stories,
       color: Color(0xFF15803D),
-      type: SubjectType.notebook,
+      type: SubjectType.text,
       description: 'قراءات الكتاب المقدس والتدريب على الإلقاء الصحيح.',
     ),
     Subject(
@@ -42,7 +42,7 @@ class CurriculumSubjects {
       name: 'محفوظات',
       icon: Icons.self_improvement,
       color: Color(0xFFB45309),
-      type: SubjectType.notebook,
+      type: SubjectType.text,
       description: 'آيات وفقرات كتابية يحفظها الشماس خلال الترم.',
     ),
     Subject(

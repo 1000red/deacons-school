@@ -6,10 +6,10 @@ import '../theme/app_theme.dart';
 import '../widgets/custom_breadcrumb_bar.dart';
 import '../widgets/custom_card.dart';
 
-class NotebookSubjectScreen extends StatelessWidget {
+class TextSubjectScreen extends StatelessWidget {
   final NavPath path;
 
-  const NotebookSubjectScreen({
+  const TextSubjectScreen({
     super.key,
     required this.path,
   });

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import '../data/curriculum_data.dart';
 import '../models/models.dart';
 import '../theme/app_theme.dart';
+
 import 'media_subject_screen.dart';
-import 'notebook_subject_screen.dart';
+import 'text_subject_screen.dart';
+import 'notebook_pdf_screen.dart';
 
 import '../widgets/custom_appbar.dart';
 import '../widgets/custom_breadcrumb_bar.dart';
@@ -18,9 +20,12 @@ class SubjectsScreen extends StatelessWidget {
     if (subject.type == SubjectType.media) {
       Navigator.of(context).push(
           MaterialPageRoute(builder: (_) => MediaSubjectScreen(path: newPath)));
+    } else if (subject.type == SubjectType.notebook) {
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => NotebookPdfScreen(path: newPath)));
     } else {
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (_) => NotebookSubjectScreen(path: newPath)));
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => TextSubjectScreen(path: newPath)));
     }
   }
 

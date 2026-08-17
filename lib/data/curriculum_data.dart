@@ -29,5 +29,6 @@ class CurriculumData {
   static Future<List<NotebookLessonItem>> notebookLessons(NavPath path) =>
       NotebookCurriculumData.lessons(path);
 
-  static String? notebookPdfUrl(NavPath path) => NotebookPdfData.driveUrl(path);
+  static String? notebookPdfUrl(NavPath path) =>
+      NotebookPdfData.previewUrl(path);
 }
