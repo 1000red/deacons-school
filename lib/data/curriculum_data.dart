@@ -2,9 +2,9 @@ import '../models/models.dart';
 
 import 'curriculum_levels.dart';
 import 'curriculum_subjects.dart';
-import 'media_curriculum_data.dart';
-import 'notebook_curriculum_data.dart';
+import 'text_curriculum_data.dart';
 import 'notebook_pdf_data.dart';
+import 'curriculum_json_loader.dart';
 
 class CurriculumData {
   CurriculumData._();
@@ -21,8 +21,10 @@ class CurriculumData {
   static List<Subject> subjectsFor(NavPath path) =>
       CurriculumSubjects.subjectsFor(path);
 
-  static List<MediaLessonItem> mediaLessons(NavPath path) =>
-      MediaCurriculumData.lessons(path);
+  static Future<List<MediaLessonItem>> mediaLessons(
+    NavPath path,
+  ) =>
+      CurriculumJsonLoader.mediaLessons(path);
 
   static Future<List<NotebookLessonItem>> notebookLessons(NavPath path) =>
       NotebookCurriculumData.lessons(path);

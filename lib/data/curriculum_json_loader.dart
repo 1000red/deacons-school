@@ -59,6 +59,32 @@ class CurriculumJsonLoader {
         .toList();
   }
 
+  static Future<List<MediaLessonItem>> mediaLessons(
+    NavPath path,
+  ) async {
+    final termJson = await _loadTermJson(path);
+
+    final subjects = termJson['subjects'] as Map<String, dynamic>?;
+    if (subjects == null) return [];
+
+    final subjectId = path.subject!.id;
+    final list = subjects[subjectId] as List<dynamic>?;
+    if (list == null) return [];
+
+    return list.map((item) {
+      return MediaLessonItem(
+        title: item['title'] as String? ?? '',
+        // بعض المواد فيها content_ar (الألحان) وبعضها content بس (الطقس/القبطي)
+        content: (item['content_ar'] ?? item['content']) as String? ?? '',
+        contentCopticArabic: item['content_coptic_arabic'] as String?,
+
+        // لسه مفيش صوت أو صورة
+        audioUrl: null,
+        imageAsset: null,
+      );
+    }).toList();
+  }
+
   /// مسح الـ cache (مفيد لو عايز تعمل refresh بعد تحديث ملف الـ json)
   static void clearCache() => _cache.clear();
 }

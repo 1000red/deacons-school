@@ -18,6 +18,7 @@ class Subject {
   final Color color;
   final SubjectType type;
   final String description;
+  final bool hasImage; // لو المادة محتاجة تعرض صورة (زي الألحان)
 
   const Subject({
     required this.id,
@@ -26,6 +27,7 @@ class Subject {
     required this.color,
     required this.type,
     required this.description,
+    this.hasImage = true,
   });
 }
 
@@ -91,17 +93,19 @@ class NavPath {
 
 class MediaLessonItem {
   final String title;
-  final String duration;
-  final bool hasAudio;
-  final bool hasNotebookImage;
-  final bool hasBoardImage;
+  final String content; // النص العربي (content_ar أو content)
+  final String? contentCopticArabic; // النص القبطي بالحروف العربية (للألحان بس)
+
+  // هنستخدمهم بعدين لما نضيف الملفات
+  final String? audioUrl;
+  final String? imageAsset;
 
   const MediaLessonItem({
     required this.title,
-    required this.duration,
-    this.hasAudio = true,
-    this.hasNotebookImage = true,
-    this.hasBoardImage = true,
+    required this.content,
+    this.contentCopticArabic,
+    this.audioUrl,
+    this.imageAsset,
   });
 }
 
