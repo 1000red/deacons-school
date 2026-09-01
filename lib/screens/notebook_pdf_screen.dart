@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 import '../data/notebook_pdf_data.dart';
 import '../models/models.dart';
 import '../theme/app_theme.dart';
+import '../widgets/notebook_pdf_view_widget.dart';
 
 class NotebookPdfScreen extends StatefulWidget {
   final NavPath path;
@@ -126,7 +126,11 @@ class _NotebookPdfScreenState extends State<NotebookPdfScreen> {
       appBar: AppBar(
         title: Text(widget.path.subject!.name),
       ),
-      body: _buildBody(),
+      body: NotebookPdfViewWidget(
+        loading: _loading,
+        error: _error,
+        localPath: _localPath,
+      ),
       floatingActionButton: (_localPath != null)
           ? FloatingActionButton(
               onPressed: _downloading ? null : _downloadToDevice,
@@ -144,31 +148,6 @@ class _NotebookPdfScreenState extends State<NotebookPdfScreen> {
                   : const Icon(Icons.download_rounded, color: Colors.white),
             )
           : null,
-    );
-  }
-
-  Widget _buildBody() {
-    if (_loading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    if (_error != null || _localPath == null) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Text(
-            _error ?? 'حدث خطأ غير متوقع.',
-            textAlign: TextAlign.center,
-            style: const TextStyle(color: AppColors.textSecondary),
-          ),
-        ),
-      );
-    }
-
-    return SfPdfViewer.file(
-      File(_localPath!),
-      pageLayoutMode: PdfPageLayoutMode.continuous,
-      scrollDirection: PdfScrollDirection.vertical,
     );
   }
 }

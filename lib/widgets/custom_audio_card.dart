@@ -1,108 +1,248 @@
+import 'dart:async';
+
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../data/media_recording_data.dart';
 import '../theme/app_theme.dart';
 
-/// بطاقة مشغّل صوت تجريبي (بدون ملف صوتي حقيقي) - تُحاكي تشغيل اللحن/التسبحة
-/// بشريط تقدّم متحرك يوضّح شكل التفاعل المستهدف.
+/// مشغل الصوت الموحد لكل المواد.
+/// يقبل رابطًا عاديًا أو رابط Google Drive؛ وتحويل رابط Drive يتم مركزيًا
+/// في [MediaRecordingData].
 class AudioPlayerCard extends StatefulWidget {
-  final String title;
-  final String duration;
+  final String? audioUrl;
   final Color color;
+  final String label;
+  final String noAudioMessage;
 
-  const AudioPlayerCard(
-      {super.key,
-      required this.title,
-      required this.duration,
-      required this.color});
+  const AudioPlayerCard({
+    super.key,
+    required this.audioUrl,
+    required this.color,
+    this.label = 'التسجيل الصوتي',
+    this.noAudioMessage = 'هذا المحتوى ليس له تسجيل بعد.',
+  });
 
   @override
   State<AudioPlayerCard> createState() => _AudioPlayerCardState();
 }
 
-class _AudioPlayerCardState extends State<AudioPlayerCard>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
+class _AudioPlayerCardState extends State<AudioPlayerCard> {
+  final AudioPlayer _player = AudioPlayer();
+  Duration _position = Duration.zero;
+  Duration _duration = Duration.zero;
+  bool _isPlaying = false;
+  bool _isLoading = false;
+  bool _isDownloading = false;
+
+  bool get _hasAudio => widget.audioUrl?.isNotEmpty ?? false;
 
   @override
   void initState() {
     super.initState();
-    _controller =
-        AnimationController(vsync: this, duration: const Duration(seconds: 8));
+    _player.onPositionChanged.listen((value) {
+      if (mounted) setState(() => _position = value);
+    });
+    _player.onDurationChanged.listen((value) {
+      if (mounted) setState(() => _duration = value);
+    });
+    _player.onPlayerStateChanged.listen((value) {
+      if (mounted) {
+        setState(() {
+          _isPlaying = value == PlayerState.playing;
+          // خط أمان: أول ما الحالة تتغير فعليًا (تشغيل/إيقاف/إيقاف مؤقت)
+          // لازم نطفي اللودينج، حتى لو الـ Future بتاع play() لسه معلق.
+          _isLoading = false;
+        });
+      }
+    });
+    _player.onPlayerComplete.listen((_) {
+      if (mounted) {
+        setState(() {
+          _isPlaying = false;
+          _position = Duration.zero;
+        });
+      }
+    });
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _player.dispose();
     super.dispose();
   }
 
-  void _toggle() {
-    if (_controller.isAnimating) {
-      _controller.stop();
-    } else {
-      if (_controller.isCompleted) _controller.reset();
-      _controller.forward();
+  Future<void> _togglePlay() async {
+    final url = MediaRecordingData.playableUrl(widget.audioUrl);
+    if (url == null || url.isEmpty) return;
+
+    try {
+      if (_isPlaying) {
+        await _player.pause();
+      } else if (_position > Duration.zero) {
+        await _player.resume();
+      } else {
+        setState(() => _isLoading = true);
+        // تايم أوت عشان لو الرابط بطيء أو فيه مشكلة شبكة،
+        // اللودينج يتوقف بدل ما يفضل شغال للأبد.
+        await _player.play(UrlSource(url)).timeout(
+          const Duration(seconds: 20),
+          onTimeout: () {
+            throw TimeoutException('انتهت مهلة تحميل الصوت');
+          },
+        );
+      }
+    } on TimeoutException {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('الاتصال بطيء جدًا، جرّب تاني.'),
+          ),
+        );
+      }
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('تعذر تشغيل الصوت.')),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
     }
-    setState(() {});
+  }
+
+  Future<void> _downloadAudio() async {
+    final url = MediaRecordingData.playableUrl(widget.audioUrl);
+    if (url == null || url.isEmpty) return;
+
+    setState(() => _isDownloading = true);
+    try {
+      final uri = Uri.parse(url);
+      final launched = await launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication,
+      );
+      if (!launched && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('تعذر فتح رابط التحميل.')),
+        );
+      }
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('تعذر تحميل الملف.')),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isDownloading = false);
+    }
+  }
+
+  String _format(Duration value) {
+    final minutes = value.inMinutes.remainder(60).toString().padLeft(2, '0');
+    final seconds = value.inSeconds.remainder(60).toString().padLeft(2, '0');
+    return '$minutes:$seconds';
   }
 
   @override
   Widget build(BuildContext context) {
+    if (!_hasAudio) {
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: widget.color.withValues(alpha: 0.06),
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: Text(
+          widget.noAudioMessage,
+          textAlign: TextAlign.center,
+          style: TextStyle(color: widget.color),
+        ),
+      );
+    }
+
+    final maximum = _duration.inSeconds.toDouble();
+    final current =
+        _position.inSeconds.clamp(0, _duration.inSeconds).toDouble();
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      width: double.infinity,
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: widget.color.withValues(alpha: 0.06),
+        color: widget.color.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: widget.color.withValues(alpha: 0.2)),
+        border: Border.all(color: widget.color.withValues(alpha: 0.12)),
       ),
-      child: Row(
+      child: Column(
         children: [
-          InkWell(
-            onTap: _toggle,
-            borderRadius: BorderRadius.circular(30),
-            child: Container(
-              width: 42,
-              height: 42,
-              decoration:
-                  BoxDecoration(color: widget.color, shape: BoxShape.circle),
-              child: AnimatedBuilder(
-                animation: _controller,
-                builder: (context, _) => Icon(
-                  _controller.isAnimating ? Icons.pause : Icons.play_arrow,
-                  color: Colors.white,
-                ),
+          Row(
+            children: [
+              Icon(Icons.headphones_rounded, color: widget.color),
+              const SizedBox(width: 8),
+              Text(widget.label,
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
+              const Spacer(),
+              IconButton(
+                onPressed: _isDownloading ? null : _downloadAudio,
+                icon: _isDownloading
+                    ? SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: widget.color,
+                        ),
+                      )
+                    : Icon(Icons.download_rounded, color: widget.color),
+                tooltip: 'تحميل التسجيل',
               ),
-            ),
+            ],
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(widget.title,
-                    style: const TextStyle(
-                        fontSize: 13.5,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimary)),
-                const SizedBox(height: 6),
-                AnimatedBuilder(
-                  animation: _controller,
-                  builder: (context, _) => ClipRRect(
-                    borderRadius: BorderRadius.circular(6),
-                    child: LinearProgressIndicator(
-                      value: _controller.value,
-                      minHeight: 5,
-                      backgroundColor: widget.color.withValues(alpha: 0.15),
-                      valueColor: AlwaysStoppedAnimation(widget.color),
-                    ),
+          Slider(
+            value: maximum == 0 ? 0 : current,
+            max: maximum == 0 ? 1 : maximum,
+            activeColor: widget.color,
+            onChanged: (value) =>
+                _player.seek(Duration(seconds: value.toInt())),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(_format(_position),
+                  style: const TextStyle(color: AppColors.textMuted)),
+              Text(_format(_duration),
+                  style: const TextStyle(color: AppColors.textMuted)),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              FilledButton(
+                onPressed: _togglePlay,
+                style: FilledButton.styleFrom(
+                  backgroundColor: widget.color,
+                  shape: const CircleBorder(),
+                ),
+                child: SizedBox(
+                  width: 30,
+                  height: 30,
+                  child: Center(
+                    child: _isLoading
+                        ? const CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          )
+                        : Icon(
+                            _isPlaying
+                                ? Icons.pause_rounded
+                                : Icons.play_arrow_rounded,
+                          ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          const SizedBox(width: 10),
-          Text(widget.duration,
-              style:
-                  const TextStyle(fontSize: 11.5, color: AppColors.textMuted)),
         ],
       ),
     );

@@ -29,7 +29,7 @@ class TextSubjectScreen extends StatelessWidget {
           ),
           Expanded(
             child: FutureBuilder<List<NotebookLessonItem>>(
-              future: CurriculumData.notebookLessons(path),
+              future: CurriculumData.textLessons(path),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(

@@ -7,7 +7,8 @@ class AppUser {
 }
 
 enum SubjectType {
-  media, // PDF + Audio
+  media, // text + Audio
+  image, // صورة بس (زي الألحان)  text + image + Audio
   notebook, // PDF
   text, //text from json
 }
@@ -28,7 +29,7 @@ class Subject {
     required this.color,
     required this.type,
     required this.description,
-    this.hasImage = true,
+    this.hasImage = false,
   });
 }
 
@@ -93,15 +94,17 @@ class NavPath {
 }
 
 class MediaLessonItem {
+  final String id;
   final String title;
   final String content; // النص العربي (content_ar أو content)
   final String? contentCopticArabic; // النص القبطي بالحروف العربية (للألحان بس)
 
   // هنستخدمهم بعدين لما نضيف الملفات
   final String? audioUrl;
-  final String? imageAsset;
+  final String? imageAsset; // صورة الدرس، وتستخدمها الألحان فقط
 
   const MediaLessonItem({
+    required this.id,
     required this.title,
     required this.content,
     this.contentCopticArabic,

@@ -2,7 +2,6 @@ import '../models/models.dart';
 
 import 'curriculum_levels.dart';
 import 'curriculum_subjects.dart';
-import 'text_curriculum_data.dart';
 import 'notebook_pdf_data.dart';
 import 'curriculum_json_loader.dart';
 
@@ -26,8 +25,8 @@ class CurriculumData {
   ) =>
       CurriculumJsonLoader.mediaLessons(path);
 
-  static Future<List<NotebookLessonItem>> notebookLessons(NavPath path) =>
-      NotebookCurriculumData.lessons(path);
+  static Future<List<NotebookLessonItem>> textLessons(NavPath path) =>
+      CurriculumJsonLoader.textLessons(path);
 
   static String? notebookPdfUrl(NavPath path) =>
       NotebookPdfData.previewUrl(path);

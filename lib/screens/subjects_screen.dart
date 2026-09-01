@@ -6,7 +6,6 @@ import '../theme/app_theme.dart';
 import 'media_subject_screen.dart';
 import 'text_subject_screen.dart';
 import 'notebook_pdf_screen.dart';
-
 import '../widgets/custom_appbar.dart';
 import '../widgets/custom_breadcrumb_bar.dart';
 
@@ -87,7 +86,9 @@ class SubjectsScreen extends StatelessWidget {
                                   const SizedBox(width: 8),
                                   AppBadge(
                                     label: subject.type == SubjectType.media
-                                        ? 'صوت + صور'
+                                        ? (subject.hasImage
+                                            ? 'نص + صوت + صورة'
+                                            : 'نص + صوت')
                                         : 'مذكرة + محتوى',
                                     background:
                                         subject.color.withValues(alpha: 0.12),

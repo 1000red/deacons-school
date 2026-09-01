@@ -2,9 +2,14 @@ import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 import '../models/models.dart';
 import 'package:flutter/foundation.dart';
+import 'media_recording_data.dart';
 
+/// المصدر الوحيد لبيانات المواد التي تقرأ من الـ JSON:
+/// طقس، قراءة، محفوظات، قبطي، وألحان.
+///
 /// بيقرا ملفات الـ JSON من assets/curriculum/{level}/{year}/{term}.json
-/// وبيحولها لـ NotebookLessonItem حسب المادة (subject) المطلوبة.
+/// ويرجع بيانات المادة الموجودة في [NavPath]. المذكرة لا تستخدم هذا الملف
+/// لأنها تُفتح كـ PDF من Google Drive.
 ///
 /// بيعمل cache للملف بعد أول قراءة عشان ميعملش قراءة من الـ disk
 /// في كل مرة يفتح فيها المستخدم نفس المادة.
@@ -35,8 +40,8 @@ class CurriculumJsonLoader {
     }
   }
 
-  /// بيرجع دروس مادة notebook-type (زي rites, reading, memorization)
-  static Future<List<NotebookLessonItem>> notebookLessons(
+  /// دروس طقس وقراءة ومحفوظات.
+  static Future<List<NotebookLessonItem>> textLessons(
     NavPath path,
   ) async {
     final termJson = await _loadTermJson(path);
@@ -68,19 +73,35 @@ class CurriculumJsonLoader {
     if (subjects == null) return [];
 
     final subjectId = path.subject!.id;
-    final list = subjects[subjectId] as List<dynamic>?;
+    // ملفات المنهج القديمة سمت الألحان melodies؛ الشاشة تستخدم hymns.
+    final list = (subjects[subjectId] ??
+        (subjectId == 'hymns' ? subjects['melodies'] : null)) as List<dynamic>?;
     if (list == null) return [];
 
-    return list.map((item) {
+    return list.asMap().entries.map((entry) {
+      final index = entry.key;
+      final item = entry.value as Map<String, dynamic>;
+      final title = item['title'] as String? ?? '';
+
       return MediaLessonItem(
-        title: item['title'] as String? ?? '',
+        // نستخدم id من الـ JSON لو موجود، وإلا نبني id فريد من
+        // subjectId + رقم الترتيب (عشان نضمن التفرد حتى لو تكرر العنوان)
+        id: item['id'] as String? ?? '${subjectId}_$index',
+        title: title,
         // بعض المواد فيها content_ar (الألحان) وبعضها content بس (الطقس/القبطي)
         content: (item['content_ar'] ?? item['content']) as String? ?? '',
         contentCopticArabic: item['content_coptic_arabic'] as String?,
 
-        // لسه مفيش صوت أو صورة
-        audioUrl: null,
-        imageAsset: null,
+        // كل التسجيلات تُقرأ من ملف Google Drive المركزي فقط.
+        audioUrl: MediaRecordingData.audioUrl(path, title),
+
+        // عند إضافة تسجيل منفصل لنطق الحرف يُربط أيضًا في
+        // MediaRecordingData، وليس داخل الـ JSON.
+
+        // الألحان فقط تعرض صورة. يمكن تخصيص صورة للدرس عبر image_asset
+        // في الـ JSON؛ وإن لم توجد نستخدم الصورة الافتراضية للألحان.
+        imageAsset:
+            path.subject!.hasImage ? item['image_asset'] as String? : null,
       );
     }).toList();
   }

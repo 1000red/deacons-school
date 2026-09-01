@@ -26,8 +26,8 @@ class CurriculumSubjects {
       name: 'قبطي',
       icon: Icons.menu_book_rounded,
       color: Color(0xFF0F766E),
-      type: SubjectType.text,
-      description: 'اللغة القبطية: نطق وتسبحة بالصوت مع صور المذكرة والسبورة.',
+      type: SubjectType.media,
+      description: 'اللغة القبطية: نطق وتسبحة بالصوت.',
     ),
     Subject(
       id: 'reading',
@@ -51,6 +51,7 @@ class CurriculumSubjects {
       icon: Icons.music_note,
       color: Color(0xFF9333EA),
       type: SubjectType.media,
+      hasImage: true,
       description: 'ألحان وتسابيح بالصوت مع صور المذكرة والسبورة بالهزات.',
     ),
   ];

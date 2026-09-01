@@ -23,6 +23,8 @@ dependencies:
   permission_handler: ^11.3.1
   open_filex: ^4.5.0
   path_provider: ^2.1.5
+  gal: ^2.3.0 # لحفظ الصور في معرض الصور (Gallery)
+  image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_test:
