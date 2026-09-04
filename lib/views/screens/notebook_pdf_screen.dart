@@ -5,9 +5,9 @@ import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../data/notebook_pdf_data.dart';
-import '../models/models.dart';
-import '../theme/app_theme.dart';
+import '../../services/notebook_pdf_data.dart';
+import '../../models/models.dart';
+import '../../core/theme/app_theme.dart';
 import '../widgets/notebook_pdf_view_widget.dart';
 
 class NotebookPdfScreen extends StatefulWidget {

@@ -1,10 +1,10 @@
 import 'package:deacons_school_mobile/models/models.dart';
 import 'package:flutter/material.dart';
 
-import 'screens/levels_screen.dart';
-import 'screens/years_screen.dart';
-import 'screens/terms_screen.dart';
-import 'screens/subjects_screen.dart';
+import '../../views/screens/levels_screen.dart';
+import '../../views/screens/years_screen.dart';
+import '../../views/screens/terms_screen.dart';
+import '../../views/screens/subjects_screen.dart';
 
 class AppNavigation {
   static void navigateToLevelScreen(BuildContext context) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../models/models.dart';
-import '../theme/app_theme.dart';
+import '../../models/models.dart';
+import '../../core/theme/app_theme.dart';
 
 class CustomCard extends StatelessWidget {
   final String title;

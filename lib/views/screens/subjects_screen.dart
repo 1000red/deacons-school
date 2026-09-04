@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../data/curriculum_data.dart';
-import '../models/models.dart';
-import '../theme/app_theme.dart';
+import '../../services/curriculum_data.dart';
+import '../../models/models.dart';
+import '../../core/theme/app_theme.dart';
 
 import 'media_subject_screen.dart';
 import 'text_subject_screen.dart';

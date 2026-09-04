@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../state/app_state.dart';
-import '../theme/app_theme.dart';
+import '../../state/app_state.dart';
+import '../../core/theme/app_theme.dart';
 
-import '../navigator.dart';
+import '../../core/utils/navigator.dart';
 
 import '../widgets/custom_text.dart';
 import '../widgets/custom_textfield.dart';

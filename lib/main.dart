@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'screens/login_screen.dart';
-import 'theme/app_theme.dart';
+import 'views/screens/login_screen.dart';
+import 'core/theme/app_theme.dart';
 
 void main() {
   runApp(const DeaconsSchoolApp());

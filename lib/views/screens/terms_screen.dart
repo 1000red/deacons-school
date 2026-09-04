@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../data/curriculum_data.dart';
-import '../models/models.dart';
+import '../../services/curriculum_data.dart';
+import '../../models/models.dart';
 import 'subjects_screen.dart';
 
 import '../widgets/custom_appbar.dart';

@@ -1,21 +1,13 @@
 import '../models/models.dart';
 
-/// ملفات تسجيلات القبطي والألحان المخزنة على Google Drive.
-///
-/// أضف الـ fileId فقط بين علامتي الاقتباس. مثال:
-/// 'third/third_y2/t3/hymns/الكاثوليكون قبطى': '1AbCdEf...',
-///
-/// المفتاح يحتوي على الـ curriculumKey وعنوان الدرس، لذلك لا يتأثر الربط
-/// بتغيير ترتيب الدروس داخل ملف الـ JSON.
 class MediaRecordingData {
   MediaRecordingData._();
 
   static const _driveIds = <String, String>{
     // ===== المستوى الثالث | السنة الثانية | الترم الثاني =====
-    // ألحان (اسمها melodies داخل ملف الـ JSON القديم)
-    'third/third_y2/t2/hymns/لحن أجيوس الحزايني الكبير':
+    'third/third_y2/t2/hymns/لحن اجيوس الحزايني الكبير':
         '1T9H7Hh6xm7i3T-GFnY0ZVkxLvjCc2vKp',
-    'third/third_y2/t2/hymns/مرد الإبركسيس في أيام الصوم الكبير / شاريه إفنوتي':
+    'third/third_y2/t2/hymns/مرد الإبركسيس في ايام الصوم الكبير / شاريه افنوتي':
         '1LJvnSxmBpzuOPk7zAUFoae85AmuPjqbl',
     'third/third_y2/t2/hymns/لحن خريستوس أنيستي الصغيرة':
         '1g9kYgDSoapRULhAknjZ3-Fby3bnfjnLH',
@@ -29,7 +21,7 @@ class MediaRecordingData {
     'third/third_y2/t3/hymns/الكاثوليكون قبطى':
         '1jqzJlDO0JDTR4-Ce8y8kX2c3O5FSsAO_',
     'third/third_y2/t3/hymns/الأسبسمس الواطس السنوى / أيها الرب إله القوات':
-        '1pga1QMES3ofvYnc3oOBZsHsBwkpD62y',
+        '1pga1QMES3ofvYnc3oOBZsHsBwkpD62yQ',
     'third/third_y2/t3/hymns/الهوس الثانى': '1Y2I44W-Za7CZR6LmMVfXAid51V8SUj9L',
     'third/third_y2/t3/hymns/لبش الهوس الثانى / مارين أووأونه':
         '143oiHVFbVxZdStBkETgMQ-xbs5aX_mzp',
