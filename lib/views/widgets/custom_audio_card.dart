@@ -34,27 +34,43 @@ class AudioPlayerCard extends StatefulWidget {
   State<AudioPlayerCard> createState() => _AudioPlayerCardState();
 }
 
-class _AudioPlayerCardState extends State<AudioPlayerCard> {
+class _AudioPlayerCardState extends State<AudioPlayerCard>
+    with AutomaticKeepAliveClientMixin {
   final AudioPlayer _player = AudioPlayer();
+
   Duration _position = Duration.zero;
   Duration _duration = Duration.zero;
+
   bool _isPlaying = false;
   bool _isLoading = false;
 
   /// نسبة التحميل من 0 لـ 1. null يعني لسه مبدأناش أو الحجم مش معروف.
   double? _downloadProgress;
 
+  /// مهم جدًا:
+  /// يخلي Flutter يحتفظ بالـ State حتى لو الكارت خرج من الشاشة
+  /// بسبب الـ scrolling داخل ListView / Scrollable.
+  @override
+  bool get wantKeepAlive => true;
+
   bool get _hasAudio => widget.audioUrl?.isNotEmpty ?? false;
 
   @override
   void initState() {
     super.initState();
+
     _player.onPositionChanged.listen((value) {
-      if (mounted) setState(() => _position = value);
+      if (mounted) {
+        setState(() => _position = value);
+      }
     });
+
     _player.onDurationChanged.listen((value) {
-      if (mounted) setState(() => _duration = value);
+      if (mounted) {
+        setState(() => _duration = value);
+      }
     });
+
     _player.onPlayerStateChanged.listen((value) {
       if (mounted) {
         setState(() {
@@ -63,6 +79,7 @@ class _AudioPlayerCardState extends State<AudioPlayerCard> {
         });
       }
     });
+
     _player.onPlayerComplete.listen((_) {
       if (mounted) {
         setState(() {
@@ -84,16 +101,22 @@ class _AudioPlayerCardState extends State<AudioPlayerCard> {
   /// بالفعل بيرجعه فورًا من غير تحميل جديد.
   Future<File> _resolveLocalFile(String url) async {
     final dir = await getTemporaryDirectory();
+
     final driveId = Uri.tryParse(url)?.queryParameters['id'];
     final key = driveId ?? url.hashCode.toString();
+
     final file = File('${dir.path}/audio_cache_$key');
 
     if (await file.exists()) {
       final size = await file.length();
-      if (size > 0) return file;
+
+      if (size > 0) {
+        return file;
+      }
     }
 
     final client = http.Client();
+
     try {
       final request = http.Request('GET', Uri.parse(url));
       final streamedResponse = await client.send(request);
@@ -101,7 +124,7 @@ class _AudioPlayerCardState extends State<AudioPlayerCard> {
       final contentType =
           (streamedResponse.headers['content-type'] ?? '').toLowerCase();
 
-      // لو Google Drive رجّع صفحة HTML (تحذير فيروسات مثلاً) بدل الصوت،
+      // لو Google Drive رجّع صفحة HTML بدل الصوت
       // منفعش نشغّلها كملف صوتي.
       if (streamedResponse.statusCode != 200 ||
           contentType.contains('text/html')) {
@@ -111,14 +134,20 @@ class _AudioPlayerCardState extends State<AudioPlayerCard> {
       }
 
       final total = streamedResponse.contentLength ?? 0;
+
       var received = 0;
+
       final sink = file.openWrite();
 
       await for (final chunk in streamedResponse.stream) {
         received += chunk.length;
+
         sink.add(chunk);
+
         if (total > 0 && mounted) {
-          setState(() => _downloadProgress = received / total);
+          setState(() {
+            _downloadProgress = received / total;
+          });
         }
       }
 
@@ -133,6 +162,7 @@ class _AudioPlayerCardState extends State<AudioPlayerCard> {
 
   Future<void> _togglePlay() async {
     final url = MediaRecordingData.playableUrl(widget.audioUrl);
+
     if (url == null || url.isEmpty) return;
 
     try {
@@ -140,6 +170,7 @@ class _AudioPlayerCardState extends State<AudioPlayerCard> {
         await _player.pause();
         return;
       }
+
       if (_position > Duration.zero) {
         await _player.resume();
         return;
@@ -157,7 +188,9 @@ class _AudioPlayerCardState extends State<AudioPlayerCard> {
         },
       );
 
-      await _player.play(DeviceFileSource(file.path));
+      await _player.play(
+        DeviceFileSource(file.path),
+      );
     } on TimeoutException {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -169,7 +202,11 @@ class _AudioPlayerCardState extends State<AudioPlayerCard> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString().replaceFirst('Exception: ', ''))),
+          SnackBar(
+            content: Text(
+              e.toString().replaceFirst('Exception: ', ''),
+            ),
+          ),
         );
       }
     } finally {
@@ -184,12 +221,17 @@ class _AudioPlayerCardState extends State<AudioPlayerCard> {
 
   String _format(Duration value) {
     final minutes = value.inMinutes.remainder(60).toString().padLeft(2, '0');
+
     final seconds = value.inSeconds.remainder(60).toString().padLeft(2, '0');
+
     return '$minutes:$seconds';
   }
 
   @override
   Widget build(BuildContext context) {
+    // مهم جدًا مع AutomaticKeepAliveClientMixin
+    super.build(context);
+
     if (!_hasAudio) {
       return Container(
         width: double.infinity,
@@ -201,31 +243,48 @@ class _AudioPlayerCardState extends State<AudioPlayerCard> {
         child: Text(
           widget.noAudioMessage,
           textAlign: TextAlign.center,
-          style: TextStyle(color: widget.color),
+          style: TextStyle(
+            color: widget.color,
+          ),
         ),
       );
     }
 
     final maximum = _duration.inSeconds.toDouble();
+
     final current =
         _position.inSeconds.clamp(0, _duration.inSeconds).toDouble();
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 12,
+        vertical: 8,
+      ),
       decoration: BoxDecoration(
         color: widget.color.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: widget.color.withValues(alpha: 0.12)),
+        border: Border.all(
+          color: widget.color.withValues(alpha: 0.12),
+        ),
       ),
       child: Column(
         children: [
           Row(
             children: [
-              Icon(Icons.headphones_rounded, color: widget.color),
-              const SizedBox(width: 8),
-              Text(widget.label,
-                  style: const TextStyle(fontWeight: FontWeight.bold)),
+              Icon(
+                Icons.headphones_rounded,
+                size: 20,
+                color: widget.color,
+              ),
+              const SizedBox(width: 6),
+              Text(
+                widget.label,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
               const Spacer(),
               if (_isLoading && _downloadProgress != null)
                 Text(
@@ -233,70 +292,100 @@ class _AudioPlayerCardState extends State<AudioPlayerCard> {
                   style: TextStyle(
                     color: widget.color,
                     fontWeight: FontWeight.bold,
+                    fontSize: 16,
                   ),
                 ),
             ],
           ),
           if (_isLoading)
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
+              padding: const EdgeInsets.symmetric(vertical: 6),
               child: LinearProgressIndicator(
-                value:
-                    _downloadProgress, // null = indeterminate (حجم غير معروف)
+                value: _downloadProgress,
                 color: widget.color,
                 backgroundColor: widget.color.withValues(alpha: 0.15),
+                minHeight: 3,
               ),
             )
-          else ...[
-            Slider(
-              value: maximum == 0 ? 0 : current,
-              max: maximum == 0 ? 1 : maximum,
-              activeColor: widget.color,
-              onChanged: (value) =>
-                  _player.seek(Duration(seconds: value.toInt())),
-            ),
+          else
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(_format(_position),
-                    style: const TextStyle(color: AppColors.textMuted)),
-                Text(_format(_duration),
-                    style: const TextStyle(color: AppColors.textMuted)),
-              ],
-            ),
-          ],
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              FilledButton(
-                onPressed: _isLoading ? null : _togglePlay,
-                style: FilledButton.styleFrom(
-                  backgroundColor: widget.color,
-                  shape: const CircleBorder(),
-                ),
-                child: SizedBox(
-                  width: 30,
-                  height: 30,
-                  child: Center(
-                    child: _isLoading
-                        ? const SizedBox(
-                            width: 18,
-                            height: 18,
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 2,
-                            ),
-                          )
-                        : Icon(
-                            _isPlaying
-                                ? Icons.pause_rounded
-                                : Icons.play_arrow_rounded,
-                          ),
+                // زر التشغيل
+                SizedBox(
+                  width: 42,
+                  height: 42,
+                  child: FilledButton(
+                    onPressed: _isLoading ? null : _togglePlay,
+                    style: FilledButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      backgroundColor: widget.color,
+                      shape: const CircleBorder(),
+                    ),
+                    child: Icon(
+                      _isPlaying
+                          ? Icons.pause_rounded
+                          : Icons.play_arrow_rounded,
+                      size: 24,
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
+
+                const SizedBox(width: 6),
+
+                // الـ Slider والوقت
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SliderTheme(
+                        data: SliderTheme.of(context).copyWith(
+                          trackHeight: 3,
+                          thumbShape: const RoundSliderThumbShape(
+                            enabledThumbRadius: 6,
+                          ),
+                          overlayShape: const RoundSliderOverlayShape(
+                            overlayRadius: 14,
+                          ),
+                        ),
+                        child: Slider(
+                          value: maximum == 0 ? 0 : current,
+                          max: maximum == 0 ? 1 : maximum,
+                          activeColor: widget.color,
+                          onChanged: maximum == 0
+                              ? null
+                              : (value) {
+                                  _player.seek(
+                                    Duration(
+                                      seconds: value.toInt(),
+                                    ),
+                                  );
+                                },
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            _format(_position),
+                            style: const TextStyle(
+                              color: AppColors.textMuted,
+                              fontSize: 11,
+                            ),
+                          ),
+                          Text(
+                            _format(_duration),
+                            style: const TextStyle(
+                              color: AppColors.textMuted,
+                              fontSize: 11,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
         ],
       ),
     );

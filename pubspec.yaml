@@ -23,7 +23,7 @@ dependencies:
   permission_handler: ^11.3.1
   open_filex: ^4.5.0
   path_provider: ^2.1.5
-  gal: ^2.3.0 # لحفظ الصور في معرض الصور (Gallery)
+  gal: ^2.3.0
   image_picker: ^1.1.2
   http: ^1.2.0
 
@@ -43,4 +43,7 @@ flutter:
 
   assets:
     - assets/image/
+    - assets/curriculum/preparatory/preparatory_y1/
+    - assets/curriculum/third/third_y1/
     - assets/curriculum/third/third_y2/
+    - assets/curriculum/third/third_y3/

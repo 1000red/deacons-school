@@ -5,7 +5,6 @@ import '../../models/models.dart';
 import '../../core/utils/navigator.dart';
 
 import '../widgets/custom_appbar.dart';
-// import '../widgets/custom_breadcrumb_bar.dart';
 import '../widgets/custom_list.dart';
 
 class YearsScreen extends StatefulWidget {
@@ -28,7 +27,6 @@ class _YearsScreenState extends State<YearsScreen> {
       appBar: appBarFor(widget.level.name),
       body: Column(
         children: [
-          // BreadcrumbBar(text: widget.level.name),
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.all(16),

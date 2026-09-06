@@ -19,7 +19,7 @@ class CurriculumLevels {
       subtitle: '٣ سنوات دراسية',
       icon: Icons.looks_one,
       color: Color(0xFF2563EB),
-      yearsCount: 3, // 0, 1, 2
+      yearsCount: 2, // 0, 1, 2
     ),
     Level(
       id: 'second',

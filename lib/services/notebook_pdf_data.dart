@@ -57,24 +57,23 @@ class NotebookPdfData {
   /// المفتاح: {level}/{level}_y{رقم}/t{رقم}/notebook
   static const _driveIds = <String, String>{
     // ===== تمهيدي (preparatory) =====
-    'preparatory/preparatory_y1/t1/notebook': '',
-    'preparatory/preparatory_y1/t2/notebook': '',
-    'preparatory/preparatory_y1/t3/notebook': '',
+    'preparatory/preparatory_y1/t1/notebook':
+        '184xPpgGACrX2o4Ue-AqedzjSkLDJyRFU',
+    'preparatory/preparatory_y1/t2/notebook':
+        '1Z9sJFrIgqhl066RHzlKh7GE9UQD_bWdz',
+    'preparatory/preparatory_y1/t3/notebook':
+        '1b6CetL3jd-aDppLY0o0meJYCwz_yOx4T',
 
-    // ===== المستوى الأول (first) =====
-    'first/first_y1/t1/notebook': '',
-    'first/first_y1/t2/notebook': '',
-    'first/first_y1/t3/notebook': '',
+    // ===== (first) =====
+    'first/first_y1/t1/notebook': '10dHLi8cv6Gdxc37rujPfy4Q-7vpqFrg-',
+    'first/first_y1/t2/notebook': '1YKoRZ0AEqtz8pXypAAnM8WPtZArNxCXQ',
+    'first/first_y1/t3/notebook': '10Aknr0cTHA8vd9Qh1hROZlpU4RX_CyfR',
 
-    'first/first_y2/t1/notebook': '',
-    'first/first_y2/t2/notebook': '',
-    'first/first_y2/t3/notebook': '',
+    'first/first_y2/t1/notebook': '1grZ_rsvnCZ3FITP2ZjFvyKn-iPU-sRMe',
+    'first/first_y2/t2/notebook': '1ua7c2cAjCoiT_Kg0ZOJvs-32McBaH-0m',
+    'first/first_y2/t3/notebook': '1i997nmsVF3Gfeo6HCYKGDBGvCd5Jlp-R',
 
-    'first/first_y3/t1/notebook': '',
-    'first/first_y3/t2/notebook': '',
-    'first/first_y3/t3/notebook': '',
-
-    // ===== المستوى الثاني (second) =====
+    // ===== (second) =====
     'second/second_y1/t1/notebook': '',
     'second/second_y1/t2/notebook': '',
     'second/second_y1/t3/notebook': '',
@@ -87,18 +86,18 @@ class NotebookPdfData {
     'second/second_y3/t2/notebook': '',
     'second/second_y3/t3/notebook': '',
 
-    // ===== المستوى الثالث (third) =====
-    'third/third_y1/t1/notebook': '',
-    'third/third_y1/t2/notebook': '',
-    'third/third_y1/t3/notebook': '',
+    // ===== (third) =====
+    'third/third_y1/t1/notebook': '1txDMEvLnpMWYSYGas1QCHlhPzCSOPQXU',
+    'third/third_y1/t2/notebook': '1m76Ybx_8e1ZnbYV9oNWkbejyub4F2xWd',
+    'third/third_y1/t3/notebook': '169OVAU8M8rq1KpOGPXCW_mBd2R0_SN9u',
 
     'third/third_y2/t1/notebook': '1Iy5Dh-RwswhX4LEEgC99_GsEXA6JThgW',
     'third/third_y2/t2/notebook': '1Mu2NsHNZfZgNizIMVSRadpefLtFFNSf5',
     'third/third_y2/t3/notebook': '1jYM9LmRruZA6J1DptTtsD8TSKVwlswks',
 
-    'third/third_y3/t1/notebook': '',
-    'third/third_y3/t2/notebook': '',
-    'third/third_y3/t3/notebook': '',
+    'third/third_y3/t1/notebook': '1uikfIM2Cn-RLM4Ry9n85lJzXa0GVXJYE',
+    'third/third_y3/t2/notebook': '1VVOPBvBqkHFjIpGQ1fNOLd6mXOT25Q0d',
+    'third/third_y3/t3/notebook': '1VkUFtpOcmLkJpnfP-Qm4p4YoM3GoIgZS',
   };
 
   static String? driveFileId(NavPath path) => _driveIds[path.curriculumKey];

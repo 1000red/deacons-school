@@ -59,23 +59,28 @@ class CustomCard extends StatelessWidget {
                 size: 24,
               ),
             ),
-            const SizedBox(height: 25),
+            const SizedBox(height: 20),
+            // 1. عنوان البطاقة: 16px ممتاز مع ضبط ارتفاع السطر
             Text(
               title,
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
+                height: 1.35,
               ),
               maxLines: 2,
             ),
             if (subtitle != null) ...[
               const SizedBox(height: 4),
+              // 2. النص الفرعي: تم رفعه من 12px إلى 13.5px ليكون واضحاً وقابلاً للقراءة
               Text(
                 subtitle!,
                 style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.9),
-                  fontSize: 12,
+                  color: Colors.white.withValues(alpha: 0.92),
+                  fontSize: 13.5,
+                  height: 1.3,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
             ],
@@ -128,12 +133,13 @@ class LessonCard extends StatelessWidget {
               ),
               const SizedBox(width: 10),
               Expanded(
+                // 1. عنوان الدرس: تم رفعه إلى 18px ليتفوق بصرياً على فقرة النص
                 child: Text(
                   lesson.title,
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    height: 1.4,
+                    height: 1.35,
                   ),
                 ),
               ),
@@ -145,12 +151,13 @@ class LessonCard extends StatelessWidget {
             height: 1,
           ),
           const SizedBox(height: 14),
+          // 2. محتوى الدرس: تم رفعه من 14px إلى 16.5px لقراءة مريحة جداً وسلسة
           Text(
             lesson.content,
             textAlign: TextAlign.start,
             style: const TextStyle(
-              fontSize: 14,
-              height: 1.8,
+              fontSize: 16.5,
+              height: 1.7,
               color: AppColors.textSecondary,
             ),
           ),

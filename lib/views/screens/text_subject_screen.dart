@@ -46,6 +46,7 @@ class TextSubjectScreen extends StatelessWidget {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: AppColors.textSecondary,
+                          fontSize: 16,
                         ),
                       ),
                     ),
@@ -60,6 +61,7 @@ class TextSubjectScreen extends StatelessWidget {
                       'لا يوجد محتوى متاح لهذه المادة.',
                       style: TextStyle(
                         color: AppColors.textSecondary,
+                        fontSize: 16,
                       ),
                     ),
                   );

@@ -8,7 +8,6 @@ import '../widgets/custom_audio_card.dart';
 import '../widgets/custom_breadcrumb_bar.dart';
 import '../widgets/custom_lesson_image.dart';
 
-/// شاشة المواد التي تحتوي على نص وتسجيل: قبطي وألحان.
 class MediaSubjectScreen extends StatelessWidget {
   final NavPath path;
 
@@ -78,15 +77,19 @@ class _LessonCard extends StatelessWidget {
         children: [
           Text(
             lesson.title,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                height: 1.5,
+                color: AppColors.textPrimary),
           ),
           const SizedBox(height: 12),
           if (lesson.contentCopticArabic?.isNotEmpty ?? false) ...[
             Text(
               lesson.contentCopticArabic!,
               style: TextStyle(
-                fontSize: 14,
-                height: 1.7,
+                fontSize: 17,
+                height: 1.6,
                 fontStyle: FontStyle.italic,
                 color: AppColors.textSecondary.withValues(alpha: 0.85),
               ),
@@ -106,7 +109,7 @@ class _LessonCard extends StatelessWidget {
           Text(
             lesson.content,
             style: const TextStyle(
-              fontSize: 14,
+              fontSize: 17,
               height: 1.7,
               color: AppColors.textSecondary,
             ),
