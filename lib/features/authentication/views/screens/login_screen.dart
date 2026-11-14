@@ -1,0 +1,150 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../../../core/theme/app_theme.dart';
+import '../../../../core/utils/navigator.dart';
+import '../../../../core/widgets/custom_button.dart';
+import '../../../../core/widgets/custom_text.dart';
+import '../../../../core/widgets/custom_text_field.dart';
+import '../../viewmodels/auth_view_model.dart';
+
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final _emailCtrl = TextEditingController(text: 'deacon@church.com');
+  final _passCtrl = TextEditingController(text: '123456');
+
+  @override
+  void dispose() {
+    _emailCtrl.dispose();
+    _passCtrl.dispose();
+    super.dispose();
+  }
+
+  void _submit() {
+    final authViewModel = context.read<AuthViewModel>();
+    final loggedIn = authViewModel.login(_emailCtrl.text, _passCtrl.text);
+
+    if (loggedIn) {
+      AppNavigation.navigateToLevelScreen(context);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.primary,
+      resizeToAvoidBottomInset: true,
+      body: Column(
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.35,
+            child: SafeArea(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 24),
+                  SizedBox(
+                    width: 180,
+                    height: 110,
+                    child: Image.asset(
+                      'assets/image/logo-removebg-preview.png',
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                  const SizedBox(height: 18),
+                  const Text(
+                    "أهلاً بعودتك",
+                    style: TextStyle(
+                      fontSize: 30.0,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Text(
+                    "سجّل الدخول للمتابعة",
+                    style: TextStyle(
+                      fontSize: 15.0,
+                      color: Color.fromARGB(122, 255, 255, 255),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(50.0),
+                  topRight: Radius.circular(50.0),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  left: 25.0,
+                  right: 25.0,
+                  top: 35.0,
+                ),
+                child: SingleChildScrollView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const CustomText(
+                            text: "اسم المستخدم / البريد الإلكتروني"),
+                        const SizedBox(height: 8.0),
+                        CustomTextField(
+                          controller: _emailCtrl,
+                        ),
+                        const SizedBox(height: 25.0),
+                        const CustomText(text: "كلمة المرور"),
+                        const SizedBox(height: 8.0),
+                        CustomPasswordField(
+                          controller: _passCtrl,
+                        ),
+                        Consumer<AuthViewModel>(
+                          builder: (context, authViewModel, _) {
+                            final error = authViewModel.errorMessage;
+                            if (error == null) return const SizedBox.shrink();
+
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 10.0),
+                                Text(
+                                  error,
+                                  style: const TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 12.5,
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 35.0),
+                        CustomButton(text: 'تسجيل الدخول', onPressed: _submit),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

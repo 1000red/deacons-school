@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'views/screens/login_screen.dart';
+
 import 'core/theme/app_theme.dart';
+import 'di/injection.dart';
+import 'features/authentication/views/screens/login_screen.dart';
 
 void main() {
-  runApp(const DeaconsSchoolApp());
+  runApp(buildAppDependencies(child: const DeaconsSchoolApp()));
 }
 
 class DeaconsSchoolApp extends StatelessWidget {
