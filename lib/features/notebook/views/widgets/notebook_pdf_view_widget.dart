@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
-import '../../../../core/theme/app_theme.dart';
+import '../../../../core/widgets/app_state_view.dart';
 
 class NotebookPdfViewWidget extends StatelessWidget {
   final bool loading;
@@ -19,20 +19,11 @@ class NotebookPdfViewWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (loading) {
-      return const Center(child: CircularProgressIndicator());
+      return const AppStateView.loading();
     }
 
     if (error != null || localPath == null) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Text(
-            error ?? 'حدث خطأ غير متوقع.',
-            textAlign: TextAlign.center,
-            style: const TextStyle(color: AppColors.textSecondary),
-          ),
-        ),
-      );
+      return AppStateView.error(error ?? 'حدث خطأ غير متوقع.');
     }
 
     return SfPdfViewer.file(

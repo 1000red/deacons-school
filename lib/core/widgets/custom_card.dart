@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../theme/app_theme.dart';
+
 /// كارت درجات دراسية بتدرّج لوني وأيقونة، مستخدم في شاشة المستويات.
 class CustomCard extends StatelessWidget {
   final String title;
@@ -20,35 +22,30 @@ class CustomCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.circular(AppRadius.xl),
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(AppSpacing.card),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(AppRadius.xl),
           gradient: LinearGradient(
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
             colors: [
               color,
-              color.withValues(alpha: 0.75),
+              // ختام التدرّج غامق كفاية إن النص الأبيض يفضل مقروء.
+              color.withValues(alpha: 0.95),
             ],
           ),
-          boxShadow: [
-            BoxShadow(
-              color: color.withValues(alpha: 0.35),
-              blurRadius: 14,
-              offset: const Offset(0, 8),
-            ),
-          ],
+          boxShadow: AppShadow.accent(color),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.22),
+              padding: const EdgeInsets.all(8),
+              decoration: const BoxDecoration(
+                color: Color(0x38FFFFFF), // أبيض 22%
                 shape: BoxShape.circle,
               ),
               child: Icon(
@@ -57,29 +54,23 @@ class CustomCard extends StatelessWidget {
                 size: 24,
               ),
             ),
-            const SizedBox(height: 20),
-            // 1. عنوان البطاقة: 16px ممتاز مع ضبط ارتفاع السطر
+            const SizedBox(height: AppSpacing.gap),
             Text(
               title,
-              style: const TextStyle(
+              style: AppTypography.title.copyWith(
                 color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
                 height: 1.35,
               ),
               maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
             if (subtitle != null) ...[
-              const SizedBox(height: 4),
-              // 2. النص الفرعي: تم رفعه من 12px إلى 13.5px ليكون واضحاً وقابلاً للقراءة
+              const SizedBox(height: AppSpacing.stack),
               Text(
                 subtitle!,
-                style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.92),
-                  fontSize: 13.5,
-                  height: 1.3,
-                  fontWeight: FontWeight.w400,
-                ),
+                style: AppTypography.caption.copyWith(color: Colors.white),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ],

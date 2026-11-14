@@ -20,7 +20,9 @@ class CurriculumPresentation {
   };
 
   static const _levelColors = <String, Color>{
-    'preparatory': Color(0xFF0D9488),
+    // teal-700 بدل teal-600: النص الأبيض فوقها بيدي تباين 5.5:1 (بيتجاوز
+    // معيار AA) بينما teal-600 كان بيدي 3.7:1 فقط.
+    'preparatory': Color(0xFF0F766E),
     'first': Color(0xFF2563EB),
     'second': Color(0xFF7C3AED),
     'third': Color(0xFFB45309),

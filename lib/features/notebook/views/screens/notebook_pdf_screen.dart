@@ -3,6 +3,7 @@ import 'package:open_filex/open_filex.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/widgets/app_bar.dart';
 import '../../../../data/models/models.dart';
 import '../../../../di/injection.dart';
 import '../../viewmodels/notebook_view_model.dart';
@@ -54,7 +55,7 @@ class _NotebookPdfView extends StatelessWidget {
     final fileState = viewModel.fileState;
 
     return Scaffold(
-      appBar: AppBar(title: Text(subject.name)),
+      appBar: appBarFor(subject.name),
       body: NotebookPdfViewWidget(
         loading: fileState.isInitial || fileState.isLoading,
         error: fileState.isError ? fileState.message : null,
@@ -65,7 +66,9 @@ class _NotebookPdfView extends StatelessWidget {
               onPressed: viewModel.isDownloading
                   ? null
                   : () => _downloadToDevice(context, viewModel),
-              backgroundColor: AppColors.primary,
+              backgroundColor: AppColors.accentBlue,
+              foregroundColor: Colors.white,
+              tooltip: 'تنزيل المذكرة على الجهاز',
               child: viewModel.isDownloading
                   ? SizedBox(
                       width: 22,

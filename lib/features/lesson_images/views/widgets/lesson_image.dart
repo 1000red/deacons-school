@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/theme/app_theme.dart';
 import '../../../../di/injection.dart';
 import '../../viewmodels/lesson_image_view_model.dart';
 
@@ -24,7 +25,7 @@ class LessonImage extends StatelessWidget {
     this.assetPath,
     this.editable = false,
     this.height = 180,
-    this.accentColor = Colors.blue,
+    this.accentColor = AppColors.primaryLight,
   });
 
   @override
@@ -139,18 +140,15 @@ class _LessonImageView extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
-                Icons.image_not_supported_outlined,
+                Icons.image_outlined,
                 size: 32,
-                color: accentColor.withValues(alpha: 0.4),
+                color: accentColor.withValues(alpha: 0.55),
               ),
-              const SizedBox(height: 8),
-              Text(
+              const SizedBox(height: AppSpacing.tight),
+              const Text(
                 'هذا المحتوى ليس له صورة حاليًا',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: accentColor.withValues(alpha: 0.6),
-                ),
+                style: AppTypography.caption,
               ),
             ],
           ),
@@ -168,12 +166,12 @@ class _LessonImageView extends StatelessWidget {
         GestureDetector(
           onTap: hasImage ? () => _openFullScreen(context, viewModel) : null,
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppRadius.lg),
             child: _buildImage(viewModel),
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(AppSpacing.tight),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -183,7 +181,7 @@ class _LessonImageView extends StatelessWidget {
                   () => _downloadImage(context, viewModel),
                 ),
               if (editable) ...[
-                const SizedBox(width: 8),
+                const SizedBox(width: AppSpacing.tight),
                 _circleButton(
                   Icons.camera_alt,
                   () => _pickAndPersistImage(context, viewModel),
@@ -199,13 +197,14 @@ class _LessonImageView extends StatelessWidget {
   Widget _circleButton(IconData icon, VoidCallback onTap) {
     return Material(
       color: Colors.black.withValues(alpha: 0.55),
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.circular(AppRadius.pill),
       child: InkWell(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppRadius.pill),
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Icon(icon, color: Colors.white, size: 18),
+          // هدف لمس 44×44 زي باقي أزرار التطبيق.
+          padding: const EdgeInsets.all(12),
+          child: Icon(icon, color: Colors.white, size: 20),
         ),
       ),
     );

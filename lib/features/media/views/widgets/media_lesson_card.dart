@@ -33,18 +33,17 @@ class MediaLessonCard extends StatelessWidget {
     final color = CurriculumPresentation.subjectColor(subject.id);
 
     return InkWell(
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(AppRadius.lg),
       onTap: onTap,
       child: Container(
-        padding: titleOnly
-            ? const EdgeInsets.symmetric(horizontal: 16, vertical: 14)
-            : const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(AppSpacing.card),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          color: AppColors.card,
+          borderRadius: BorderRadius.circular(AppRadius.lg),
           border: Border.all(color: color.withValues(alpha: 0.18)),
+          boxShadow: AppShadow.card,
         ),
-        child: titleOnly ? _compactBody(color) : _fullBody(color),
+        child: titleOnly ? _compactBody() : _fullBody(color),
       ),
     );
   }
@@ -53,26 +52,21 @@ class MediaLessonCard extends StatelessWidget {
   ///
   /// بنسيب العنوان يلغي سطوره لو طويل من غير قصّ، عشان المستخدم يقرا
   /// اسم اللحن كامل ويشوف نفس النص اللي هيقراه في شاشة التفاصيل.
-  Widget _compactBody(Color color) {
+  Widget _compactBody() {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Expanded(
           child: Text(
             lesson.title,
-            style: const TextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.bold,
-              height: 1.5,
-              color: AppColors.textPrimary,
-            ),
+            style: AppTypography.rowTitle,
           ),
         ),
-        const SizedBox(width: 8),
-        Icon(
+        const SizedBox(width: AppSpacing.tight),
+        const Icon(
           Icons.chevron_left,
-          size: 26,
-          color: color.withValues(alpha: 0.6),
+          size: 24,
+          color: AppColors.textMuted,
         ),
       ],
     );
@@ -86,24 +80,18 @@ class MediaLessonCard extends StatelessWidget {
       children: [
         Text(
           lesson.title,
-          style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              height: 1.5,
-              color: AppColors.textPrimary),
+          style: AppTypography.titleLarge,
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: AppSpacing.gap),
         if (lesson.contentCopticArabic?.isNotEmpty ?? false) ...[
           Text(
             lesson.contentCopticArabic!,
-            style: TextStyle(
-              fontSize: 17,
-              height: 1.6,
+            style: AppTypography.body.copyWith(
               fontStyle: FontStyle.italic,
-              color: AppColors.textSecondary.withValues(alpha: 0.85),
+              color: AppColors.textSecondary,
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.tight),
         ],
         if (subject.hasImage) ...[
           LessonImage(
@@ -113,17 +101,13 @@ class MediaLessonCard extends StatelessWidget {
             height: 180,
             editable: true,
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: AppSpacing.gap),
         ],
         Text(
           lesson.content,
-          style: const TextStyle(
-            fontSize: 17,
-            height: 1.7,
-            color: AppColors.textSecondary,
-          ),
+          style: AppTypography.body,
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: AppSpacing.gap),
         AudioPlayerCard(
           color: color,
           lesson: lesson,

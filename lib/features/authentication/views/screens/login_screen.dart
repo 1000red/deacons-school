@@ -48,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 24),
+                  const SizedBox(height: AppSpacing.card),
                   SizedBox(
                     width: 180,
                     height: 110,
@@ -57,21 +57,21 @@ class _LoginScreenState extends State<LoginScreen> {
                       fit: BoxFit.contain,
                     ),
                   ),
-                  const SizedBox(height: 18),
-                  const Text(
+                  const SizedBox(height: AppSpacing.section),
+                  Text(
                     "أهلاً بعودتك",
-                    style: TextStyle(
-                      fontSize: 30.0,
+                    style: AppTypography.display.copyWith(
                       color: Colors.white,
-                      fontWeight: FontWeight.bold,
                     ),
                   ),
+                  const SizedBox(height: AppSpacing.stack),
                   const Text(
                     "سجّل الدخول للمتابعة",
                     style: TextStyle(
-                      fontSize: 15.0,
-                      color: Color.fromARGB(122, 255, 255, 255),
-                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                      color: Color(0xCCFFFFFF), // أبيض 80% — تباين 7.3:1
+                      fontWeight: FontWeight.w500,
+                      height: 1.4,
                     ),
                   ),
                 ],
@@ -84,62 +84,76 @@ class _LoginScreenState extends State<LoginScreen> {
               decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(50.0),
-                  topRight: Radius.circular(50.0),
+                  topLeft: Radius.circular(28),
+                  topRight: Radius.circular(28),
                 ),
               ),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  left: 25.0,
-                  right: 25.0,
-                  top: 35.0,
-                ),
-                child: SingleChildScrollView(
-                  keyboardDismissBehavior:
-                      ScrollViewKeyboardDismissBehavior.onDrag,
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const CustomText(
-                            text: "اسم المستخدم / البريد الإلكتروني"),
-                        const SizedBox(height: 8.0),
-                        CustomTextField(
-                          controller: _emailCtrl,
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  // النموذج بيتوسّط رأسيًا في اللوح الأبيض لما يكون أقصر
+                  // منه (بدل ما يفضل ملتصق بالأعلى ويسيب فراغ ضخم تحته)،
+                  // ولما يبقى أطول منه بيتملّي عادي.
+                  const verticalPadding = 32 + AppSpacing.block;
+                  return SingleChildScrollView(
+                    keyboardDismissBehavior:
+                        ScrollViewKeyboardDismissBehavior.onDrag,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                        AppSpacing.block,
+                        32,
+                        AppSpacing.block,
+                        AppSpacing.block,
+                      ),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight:
+                              constraints.maxHeight - verticalPadding,
                         ),
-                        const SizedBox(height: 25.0),
-                        const CustomText(text: "كلمة المرور"),
-                        const SizedBox(height: 8.0),
-                        CustomPasswordField(
-                          controller: _passCtrl,
-                        ),
-                        Consumer<AuthViewModel>(
-                          builder: (context, authViewModel, _) {
-                            final error = authViewModel.errorMessage;
-                            if (error == null) return const SizedBox.shrink();
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const CustomText(
+                                text: "اسم المستخدم / البريد الإلكتروني"),
+                            const SizedBox(height: AppSpacing.tight),
+                            CustomTextField(
+                              controller: _emailCtrl,
+                            ),
+                            const SizedBox(height: AppSpacing.block),
+                            const CustomText(text: "كلمة المرور"),
+                            const SizedBox(height: AppSpacing.tight),
+                            CustomPasswordField(
+                              controller: _passCtrl,
+                            ),
+                            Consumer<AuthViewModel>(
+                              builder: (context, authViewModel, _) {
+                                final error = authViewModel.errorMessage;
+                                if (error == null) return const SizedBox.shrink();
 
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(height: 10.0),
-                                Text(
-                                  error,
-                                  style: const TextStyle(
-                                    color: Colors.red,
-                                    fontSize: 12.5,
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(height: AppSpacing.tight),
+                                    Text(
+                                      error,
+                                      style: AppTypography.bodySmall.copyWith(
+                                        color: AppColors.danger,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                            const SizedBox(height: AppSpacing.block),
+                            CustomButton(
+                                text: 'تسجيل الدخول', onPressed: _submit),
+                          ],
                         ),
-                        const SizedBox(height: 35.0),
-                        CustomButton(text: 'تسجيل الدخول', onPressed: _submit),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
             ),
           ),

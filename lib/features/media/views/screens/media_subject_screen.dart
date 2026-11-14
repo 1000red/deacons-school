@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/theme/app_theme.dart';
 import '../../../../core/utils/navigator.dart';
 import '../../../../core/widgets/app_bar.dart';
+import '../../../../core/widgets/app_state_view.dart';
 import '../../../../core/widgets/breadcrumb_bar.dart';
 import '../../../../data/models/models.dart';
 import '../../../../di/injection.dart';
@@ -58,23 +60,23 @@ class _MediaSubjectView extends StatelessWidget {
     final state = viewModel.state;
 
     if (state.isInitial || state.isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return const AppStateView.loading();
     }
 
     if (state.isError) {
-      return Center(child: Text(state.message!));
+      return AppStateView.error(state.message!);
     }
 
     if (state.isEmpty) {
-      return const Center(child: Text('لا يوجد محتوى متاح لهذه المادة.'));
+      return const AppStateView.empty('لا يوجد محتوى متاح لهذه المادة.');
     }
 
     final lessons = state.data!;
 
     return ListView.separated(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacing.screen),
       itemCount: lessons.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 14),
+      separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.gap),
       itemBuilder: (context, index) {
         final lesson = lessons[index];
 

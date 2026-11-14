@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/widgets/app_bar.dart';
+import '../../../../core/widgets/app_state_view.dart';
 import '../../../../core/widgets/breadcrumb_bar.dart';
 import '../../../../data/models/models.dart';
 import '../../../../di/injection.dart';
@@ -31,7 +33,7 @@ class _TextSubjectView extends StatelessWidget {
     final subject = viewModel.path.subject!;
 
     return Scaffold(
-      appBar: AppBar(title: Text(subject.name)),
+      appBar: appBarFor(subject.name),
       body: Column(
         children: [
           BreadcrumbBar(text: viewModel.path.breadcrumb),
@@ -45,43 +47,23 @@ class _TextSubjectView extends StatelessWidget {
     final state = viewModel.state;
 
     if (state.isInitial || state.isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return const AppStateView.loading();
     }
 
     if (state.isError) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Text(
-            state.message!,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: AppColors.textSecondary,
-              fontSize: 16,
-            ),
-          ),
-        ),
-      );
+      return AppStateView.error(state.message!);
     }
 
     if (state.isEmpty) {
-      return const Center(
-        child: Text(
-          'لا يوجد محتوى متاح لهذه المادة.',
-          style: TextStyle(
-            color: AppColors.textSecondary,
-            fontSize: 16,
-          ),
-        ),
-      );
+      return const AppStateView.empty('لا يوجد محتوى متاح لهذه المادة.');
     }
 
     final lessons = state.data!;
 
     return ListView.separated(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacing.screen),
       itemCount: lessons.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 18),
+      separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.gap),
       itemBuilder: (context, index) => LessonCard(
         subject: subject,
         lesson: lessons[index],

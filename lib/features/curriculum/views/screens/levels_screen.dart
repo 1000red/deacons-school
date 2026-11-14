@@ -36,8 +36,15 @@ class LevelsScreen extends StatelessWidget {
             backgroundColor: AppColors.primary,
             flexibleSpace: FlexibleSpaceBar(
               titlePadding: const EdgeInsets.only(right: 16, bottom: 14),
-              title: const Text('مدرسة الشمامسة',
-                  style: TextStyle(color: Colors.white70, fontSize: 15)),
+              title: const Text(
+                'مدرسة الشمامسة',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  height: 1.3,
+                ),
+              ),
               background: Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
@@ -46,13 +53,19 @@ class LevelsScreen extends StatelessWidget {
                     colors: [AppColors.primary, AppColors.primaryDark],
                   ),
                 ),
+                // التحية في أعلى اللافتة (تحت شريط الأدوات) عشان ما تتلاقيش
+                // مع اسم المدرسة اللي في أسفل اللافتة.
                 child: const Padding(
-                  padding: EdgeInsets.fromLTRB(20, 60, 20, 0),
+                  padding: EdgeInsets.fromLTRB(20, 64, 20, 0),
                   child: Align(
-                    alignment: Alignment.centerRight,
+                    alignment: Alignment.topRight,
                     child: Text(
                       'أهلاً بيك 👋',
-                      style: TextStyle(color: Colors.white70, fontSize: 13),
+                      style: TextStyle(
+                        color: Color(0xD9FFFFFF), // أبيض 85%
+                        fontSize: 14,
+                        height: 1.4,
+                      ),
                     ),
                   ),
                 ),
@@ -60,28 +73,27 @@ class LevelsScreen extends StatelessWidget {
             ),
           ),
           SliverPadding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(AppSpacing.screen),
             sliver: SliverToBoxAdapter(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text('اختر المستوى الدراسي',
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.textPrimary)),
-                  const SizedBox(height: 4),
+                      style: AppTypography.title),
+                  const SizedBox(height: AppSpacing.stack),
                   const Text('اختَر مستواك للاطلاع على السنين والترمات والمواد',
-                      style: TextStyle(
-                          fontSize: 12.5, color: AppColors.textSecondary)),
-                  const SizedBox(height: 16),
+                      style: AppTypography.caption),
+                  const SizedBox(height: AppSpacing.section),
                   GridView.count(
                     crossAxisCount: 2,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    mainAxisSpacing: 14,
-                    crossAxisSpacing: 14,
-                    childAspectRatio: 0.95,
+                    mainAxisSpacing: AppSpacing.gap,
+                    crossAxisSpacing: AppSpacing.gap,
+                    // ارتفاع ثابت بدل نسبة من العرض: بيخلي البطاقة مقروءة
+                    // على كل عروض الشاشات، ومن غير فراغ زايد تحت النص.
+                    // (العنوان سطرين كحد أقصى + الوصف سطر واحد = 154px.)
+                    mainAxisExtent: 164,
                     children: viewModel.levels
                         .map((level) => CustomCard(
                               title: level.name,

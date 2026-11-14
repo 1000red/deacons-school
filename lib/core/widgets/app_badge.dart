@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../theme/app_theme.dart';
+
 /// شارة صغيرة (Badge/Chip) لعرض المستوى أو التصنيف.
 class AppBadge extends StatelessWidget {
   final String label;
@@ -19,9 +21,7 @@ class AppBadge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
           color: background, borderRadius: BorderRadius.circular(999)),
-      child: Text(label,
-          style: TextStyle(
-              fontSize: 11.5, fontWeight: FontWeight.w600, color: foreground)),
+      child: Text(label, style: AppTypography.label.copyWith(color: foreground)),
     );
   }
 }

@@ -9,14 +9,16 @@ class BreadcrumbBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      color: AppColors.primaryDark.withValues(alpha: 0.04),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.screen,
+        vertical: 10,
+      ),
+      color: AppColors.primary.withValues(alpha: 0.05),
       child: Text(
         text,
-        style: const TextStyle(
-            fontSize: 12.5,
-            color: AppColors.textSecondary,
-            fontWeight: FontWeight.w600),
+        style: AppTypography.caption.copyWith(
+          fontWeight: FontWeight.w600,
+        ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),

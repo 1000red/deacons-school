@@ -42,15 +42,15 @@ class AudioPlayerCard extends StatelessWidget {
     if (!_hasAudio) {
       return Container(
         width: double.infinity,
-        padding: const EdgeInsets.all(14),
+        padding: const EdgeInsets.all(AppSpacing.gap),
         decoration: BoxDecoration(
           color: color.withValues(alpha: 0.06),
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(AppRadius.md),
         ),
         child: Text(
           noAudioMessage,
           textAlign: TextAlign.center,
-          style: TextStyle(color: color),
+          style: AppTypography.bodySmall.copyWith(color: color),
         ),
       );
     }
@@ -70,12 +70,12 @@ class AudioPlayerCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(
-        horizontal: 12,
-        vertical: 8,
+        horizontal: AppSpacing.gap,
+        vertical: AppSpacing.tight,
       ),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(AppRadius.md),
         border: Border.all(
           color: color.withValues(alpha: 0.12),
         ),
@@ -89,29 +89,22 @@ class AudioPlayerCard extends StatelessWidget {
                 size: 20,
                 color: color,
               ),
-              const SizedBox(width: 6),
+              const SizedBox(width: AppSpacing.stack),
               Text(
                 label,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
+                style: AppTypography.rowTitle,
               ),
               const Spacer(),
               if (isLoading && downloadProgress != null)
                 Text(
                   '${(downloadProgress * 100).toStringAsFixed(0)}%',
-                  style: TextStyle(
-                    color: color,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
+                  style: AppTypography.rowTitle.copyWith(color: color),
                 ),
             ],
           ),
           if (isLoading)
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 6),
+              padding: const EdgeInsets.symmetric(vertical: AppSpacing.tight),
               child: LinearProgressIndicator(
                 value: downloadProgress,
                 color: color,
@@ -124,8 +117,8 @@ class AudioPlayerCard extends StatelessWidget {
               children: [
                 // زر التشغيل
                 SizedBox(
-                  width: 42,
-                  height: 42,
+                  width: AppSizes.iconButton,
+                  height: AppSizes.iconButton,
                   child: FilledButton(
                     onPressed: () => _toggle(context),
                     style: FilledButton.styleFrom(
@@ -142,7 +135,7 @@ class AudioPlayerCard extends StatelessWidget {
                   ),
                 ),
 
-                const SizedBox(width: 6),
+                const SizedBox(width: AppSpacing.stack),
 
                 // الـ Slider والوقت
                 Expanded(
@@ -175,17 +168,11 @@ class AudioPlayerCard extends StatelessWidget {
                         children: [
                           Text(
                             _format(position),
-                            style: const TextStyle(
-                              color: AppColors.textMuted,
-                              fontSize: 11,
-                            ),
+                            style: AppTypography.label,
                           ),
                           Text(
                             _format(duration),
-                            style: const TextStyle(
-                              color: AppColors.textMuted,
-                              fontSize: 11,
-                            ),
+                            style: AppTypography.label,
                           ),
                         ],
                       ),

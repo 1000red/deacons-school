@@ -20,13 +20,14 @@ class LessonCard extends StatelessWidget {
     final color = CurriculumPresentation.subjectColor(subject.id);
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacing.card),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        color: AppColors.card,
+        borderRadius: BorderRadius.circular(AppRadius.lg),
         border: Border.all(
           color: color.withValues(alpha: 0.18),
         ),
+        boxShadow: AppShadow.card,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,7 +40,7 @@ class LessonCard extends StatelessWidget {
                 height: 36,
                 decoration: BoxDecoration(
                   color: color.withValues(alpha: 0.10),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(AppRadius.sm),
                 ),
                 child: Icon(
                   CurriculumPresentation.subjectIcon(subject.id),
@@ -47,35 +48,24 @@ class LessonCard extends StatelessWidget {
                   size: 20,
                 ),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: AppSpacing.tight),
               Expanded(
-                // 1. عنوان الدرس: تم رفعه إلى 18px ليتفوق بصرياً على فقرة النص
                 child: Text(
                   lesson.title,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    height: 1.35,
-                  ),
+                  style: AppTypography.title,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 14),
-          Divider(
-            color: color.withValues(alpha: 0.12),
-            height: 1,
-          ),
-          const SizedBox(height: 14),
-          // 2. محتوى الدرس: تم رفعه من 14px إلى 16.5px لقراءة مريحة جداً وسلسة
+          const SizedBox(height: AppSpacing.gap),
+          Divider(color: color.withValues(alpha: 0.15)),
+          const SizedBox(height: AppSpacing.gap),
+          // محتوى الدرس: أطول نص في التطبيق، فبياخد أعلى ارتفاع سطر
+          // وأغمق لون عشان يفضل مريح في القراءة الطويلة.
           Text(
             lesson.content,
             textAlign: TextAlign.start,
-            style: const TextStyle(
-              fontSize: 16.5,
-              height: 1.7,
-              color: AppColors.textSecondary,
-            ),
+            style: AppTypography.body,
           ),
         ],
       ),

@@ -26,82 +26,90 @@ class SubjectsScreen extends StatelessWidget {
           BreadcrumbBar(text: path.breadcrumb),
           Expanded(
             child: ListView.separated(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(AppSpacing.screen),
               itemCount: subjects.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              separatorBuilder: (_, __) =>
+                  const SizedBox(height: AppSpacing.gap),
               itemBuilder: (context, i) {
                 final subject = subjects[i];
                 final subjectColor =
                     CurriculumPresentation.subjectColor(subject.id);
 
                 return InkWell(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(AppRadius.lg),
                   onTap: () => AppNavigation.openSubject(
                     context,
                     path.copyWith(subject: subject),
                   ),
                   child: Container(
-                    padding: const EdgeInsets.all(14),
+                    padding: const EdgeInsets.all(AppSpacing.card),
                     decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
+                      color: AppColors.card,
+                      borderRadius: BorderRadius.circular(AppRadius.lg),
                       border: Border.all(
                           color: subjectColor.withValues(alpha: 0.2)),
-                      boxShadow: [
-                        BoxShadow(
-                            color: subjectColor.withValues(alpha: 0.08),
-                            blurRadius: 10,
-                            offset: const Offset(0, 4))
-                      ],
+                      boxShadow: AppShadow.card,
                     ),
                     child: Row(
                       children: [
                         Container(
-                          width: 52,
-                          height: 52,
+                          width: AppSizes.listIcon,
+                          height: AppSizes.listIcon,
                           decoration: BoxDecoration(
                               color: subjectColor.withValues(alpha: 0.12),
                               shape: BoxShape.circle),
                           child: Icon(
                               CurriculumPresentation.subjectIcon(subject.id),
                               color: subjectColor,
-                              size: 26),
+                              size: 22),
                         ),
-                        const SizedBox(width: 14),
+                        const SizedBox(width: AppSpacing.iconGap),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
+                              // Wrap بدل Row: لو الاسم طويل أو الشارة ما
+                              // سعتش، الشارة بتنزل لسطر جديد بدل ما الـ
+                              // Row يفيض ويبقى فيه خطوط تحذير.
+                              Wrap(
+                                spacing: AppSpacing.tight,
+                                runSpacing: AppSpacing.stack,
+                                crossAxisAlignment: WrapCrossAlignment.center,
                                 children: [
-                                  Text(subject.name,
-                                      style: const TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                          color: AppColors.textPrimary)),
-                                  const SizedBox(width: 8),
+                                  Text(
+                                    subject.name,
+                                    style: AppTypography.rowTitle,
+                                  ),
                                   AppBadge(
                                     label: subject.type == SubjectType.media
                                         ? (subject.hasImage
                                             ? 'نص + صوت + صورة'
                                             : 'نص + صوت')
                                         : 'مذكرة + محتوى',
-                                    background:
-                                        subjectColor.withValues(alpha: 0.12),
-                                    foreground: subjectColor,
+                                    // شارة بلون المادة صلب + نص أبيض، بنفس
+                                    // أسلوب كروت المستويات. النسخة القديمة
+                                    // (نص ملوّن على خلفية باهتة) كان تباينها
+                                    // 4.25–4.48:1 أي أقل من معيار AA.
+                                    background: subjectColor,
+                                    foreground: Colors.white,
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 4),
-                              Text(subject.description,
-                                  style: const TextStyle(
-                                      fontSize: 11.5, color: Colors.black54),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis),
+                              const SizedBox(height: AppSpacing.stack),
+                              Text(
+                                subject.description,
+                                style: AppTypography.caption,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ],
                           ),
                         ),
-                        const Icon(Icons.chevron_left, color: Colors.black26),
+                        const SizedBox(width: AppSpacing.tight),
+                        const Icon(
+                          Icons.chevron_left,
+                          color: AppColors.textMuted,
+                        ),
                       ],
                     ),
                   ),

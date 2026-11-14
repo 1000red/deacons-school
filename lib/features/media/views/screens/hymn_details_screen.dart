@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/app_bar.dart';
+import '../../../../core/widgets/app_state_view.dart';
 import '../../../../core/widgets/breadcrumb_bar.dart';
 import '../../../../data/models/models.dart';
 import '../../../../di/injection.dart';
@@ -71,21 +72,21 @@ class _HymnDetailsView extends StatelessWidget {
     final state = viewModel.state;
 
     if (state.isInitial || state.isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return const AppStateView.loading();
     }
 
     if (state.isError) {
-      return Center(child: Text(state.message!));
+      return AppStateView.error(state.message!);
     }
 
     if (state.isEmpty) {
-      return const Center(child: Text('لم يتم العثور على هذا اللحن.'));
+      return const AppStateView.empty('لم يتم العثور على هذا اللحن.');
     }
 
     final lesson = state.data!;
 
     return ListView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacing.screen),
       children: [
         // ===== صورة اللحن (أكبر ما يمكن في الأعلى) =====
         LessonImage(
@@ -95,63 +96,53 @@ class _HymnDetailsView extends StatelessWidget {
           height: 220,
           editable: true,
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: AppSpacing.section),
 
         // ===== كلام اللحن =====
         Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(AppSpacing.card),
           decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
+            color: AppColors.card,
+            borderRadius: BorderRadius.circular(AppRadius.lg),
             border: Border.all(color: color.withValues(alpha: 0.18)),
+            boxShadow: AppShadow.card,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 lesson.title,
-                style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  height: 1.5,
-                  color: AppColors.textPrimary,
-                ),
+                style: AppTypography.titleLarge,
               ),
               if (lesson.contentCopticArabic?.isNotEmpty ?? false) ...[
-                const SizedBox(height: 12),
+                const SizedBox(height: AppSpacing.gap),
                 Text(
                   lesson.contentCopticArabic!,
-                  style: TextStyle(
-                    fontSize: 18,
-                    height: 1.8,
+                  style: AppTypography.body.copyWith(
                     fontStyle: FontStyle.italic,
-                    color: AppColors.textSecondary.withValues(alpha: 0.85),
+                    color: AppColors.textSecondary,
                   ),
                 ),
               ],
               if (lesson.content.isNotEmpty) ...[
-                const SizedBox(height: 12),
+                const SizedBox(height: AppSpacing.gap),
                 Text(
                   lesson.content,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    height: 1.8,
-                    color: AppColors.textSecondary,
-                  ),
+                  style: AppTypography.body,
                 ),
               ],
             ],
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: AppSpacing.section),
 
         // ===== التسجيل الصوتي =====
         AudioPlayerCard(
           lesson: lesson,
           color: color,
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: AppSpacing.section),
       ],
     );
   }

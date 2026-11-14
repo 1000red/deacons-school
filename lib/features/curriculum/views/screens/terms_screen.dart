@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/theme/app_theme.dart';
 import '../../../../core/utils/navigator.dart';
 import '../../../../core/widgets/app_bar.dart';
 import '../../../../core/widgets/breadcrumb_bar.dart';
@@ -29,9 +30,10 @@ class TermsScreen extends StatelessWidget {
           BreadcrumbBar(text: crumb),
           Expanded(
             child: ListView.separated(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(AppSpacing.screen),
               itemCount: terms.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              separatorBuilder: (_, __) =>
+                  const SizedBox(height: AppSpacing.gap),
               itemBuilder: (context, i) {
                 final term = terms[i];
                 final path = NavPath(level: level, year: year, term: term);
@@ -39,7 +41,9 @@ class TermsScreen extends StatelessWidget {
                   title: term.name,
                   subtitle: 'يحتوي على 5 مواد دراسية',
                   icon: Icons.menu_book,
-                  color: levelColor.withValues(alpha: 0.9 - i * 0.12),
+                  // لون واحد ثابت لكل الترمات (بدل التدرّج حسب الرقم اللي
+                  // كان بيقلل تباين النص الأبيض لدرجة غير مقروءة).
+                  color: levelColor,
                   onTap: () =>
                       AppNavigation.navigateToSubjectsScreen(context, path),
                 );

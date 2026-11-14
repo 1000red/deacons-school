@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme.dart';
 
+import '../theme/app_theme.dart';
+
+/// زر أساسي موحّد (عرض كامل + ارتفاع مريح للمس).
+///
+/// الشكل والألوان والخط جايين من `ThemeData.elevatedButtonTheme`
+/// في [AppTheme]، فال.widget بس بيحدد النص والضغط.
 class CustomButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
@@ -11,23 +16,10 @@ class CustomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 55,
+      height: AppSizes.buttonHeight,
       child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
         onPressed: onPressed,
-        child: Text(
-          text,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        child: Text(text, maxLines: 1, overflow: TextOverflow.ellipsis),
       ),
     );
   }

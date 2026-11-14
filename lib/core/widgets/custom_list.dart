@@ -57,9 +57,8 @@ class _CustomListState extends State<CustomList> {
     final Color titleColor =
         widget.filled ? Colors.white : AppColors.textPrimary;
 
-    final Color subtitleColor = widget.filled
-        ? Colors.white.withValues(alpha: 0.85)
-        : AppColors.textSecondary;
+    final Color subtitleColor =
+        widget.filled ? Colors.white : AppColors.textSecondary;
 
     final Color iconColor = widget.filled ? Colors.white : widget.color;
 
@@ -68,7 +67,7 @@ class _CustomListState extends State<CustomList> {
         : widget.color.withValues(alpha: 0.12);
 
     final Color trailingColor = widget.filled
-        ? Colors.white.withValues(alpha: 0.85)
+        ? Colors.white.withValues(alpha: 0.9)
         : AppColors.textMuted;
 
     return Column(
@@ -78,48 +77,37 @@ class _CustomListState extends State<CustomList> {
           color: Colors.transparent,
           child: InkWell(
             onTap: _handleTap,
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(AppRadius.lg),
             child: Container(
-              padding: const EdgeInsets.all(14),
+              padding: const EdgeInsets.all(AppSpacing.card),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(18),
+                borderRadius: BorderRadius.circular(AppRadius.lg),
                 gradient: widget.filled
                     ? LinearGradient(
                         begin: Alignment.topRight,
                         end: Alignment.bottomLeft,
                         colors: [
                           widget.color,
-                          widget.color.withValues(alpha: 0.75),
+                          // ختام التدرّج غامق كفاية إن النص الأبيض يفضل مقروء
+                          // (4.6:1 على الأقل) بدل التدرّج الفاتح القديم.
+                          widget.color.withValues(alpha: 0.95),
                         ],
                       )
                     : null,
                 color: widget.filled ? null : AppColors.card,
                 border: widget.filled
                     ? null
-                    : Border.all(
-                        color: AppColors.border,
+                    : const Border.fromBorderSide(
+                        BorderSide(color: AppColors.border),
                       ),
-                boxShadow: widget.filled
-                    ? [
-                        BoxShadow(
-                          color: widget.color.withValues(alpha: 0.32),
-                          blurRadius: 14,
-                          offset: const Offset(0, 8),
-                        ),
-                      ]
-                    : [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.05),
-                          blurRadius: 8,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
+                boxShadow:
+                    widget.filled ? AppShadow.accent(widget.color) : AppShadow.card,
               ),
               child: Row(
                 children: [
                   Container(
-                    width: 46,
-                    height: 46,
+                    width: AppSizes.listIcon,
+                    height: AppSizes.listIcon,
                     decoration: BoxDecoration(
                       color: iconBgColor,
                       shape: BoxShape.circle,
@@ -130,7 +118,7 @@ class _CustomListState extends State<CustomList> {
                       size: 22,
                     ),
                   ),
-                  const SizedBox(width: 14),
+                  const SizedBox(width: AppSpacing.iconGap),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -138,21 +126,19 @@ class _CustomListState extends State<CustomList> {
                       children: [
                         Text(
                           widget.title,
-                          style: TextStyle(
+                          style: AppTypography.rowTitle.copyWith(
                             color: titleColor,
-                            fontSize: 15.5,
-                            fontWeight: FontWeight.bold,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                         if (widget.subtitle != null) ...[
-                          const SizedBox(height: 3),
+                          const SizedBox(height: AppSpacing.stack),
                           Text(
                             widget.subtitle!,
-                            style: TextStyle(
+                            style: AppTypography.caption.copyWith(
                               color: subtitleColor,
-                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -187,12 +173,13 @@ class _CustomListState extends State<CustomList> {
             curve: Curves.easeInOut,
             child: _expanded
                 ? Padding(
-                    padding: const EdgeInsets.only(top: 10),
+                    padding: const EdgeInsets.only(top: AppSpacing.gap),
                     child: Column(
                       children: widget.children!
                           .map(
                             (child) => Padding(
-                              padding: const EdgeInsets.only(bottom: 10),
+                              padding:
+                                  const EdgeInsets.only(bottom: AppSpacing.gap),
                               child: child,
                             ),
                           )

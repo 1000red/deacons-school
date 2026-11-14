@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/theme/app_theme.dart';
 import '../../../../core/utils/navigator.dart';
 import '../../../../core/widgets/app_bar.dart';
 import '../../../../core/widgets/custom_list.dart';
@@ -32,14 +33,14 @@ class _YearsScreenState extends State<YearsScreen> {
         children: [
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(AppSpacing.screen),
               itemCount: years.length,
               itemBuilder: (context, i) {
                 final year = years[i];
                 final isExpanded = _expandedYearIndex == i;
 
                 return Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
+                  padding: const EdgeInsets.only(bottom: AppSpacing.gap),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -60,8 +61,10 @@ class _YearsScreenState extends State<YearsScreen> {
                         curve: Curves.easeInOut,
                         child: isExpanded
                             ? Container(
-                                margin: const EdgeInsets.only(top: 10.0),
-                                padding: const EdgeInsets.only(right: 10.0),
+                                margin:
+                                    const EdgeInsets.only(top: AppSpacing.gap),
+                                padding: const EdgeInsets.only(
+                                    right: AppSpacing.gap),
                                 decoration: BoxDecoration(
                                   border: Border(
                                     right: BorderSide(
@@ -81,8 +84,8 @@ class _YearsScreenState extends State<YearsScreen> {
                                       term: term,
                                     );
                                     return Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 10),
+                                      padding: const EdgeInsets.only(
+                                          bottom: AppSpacing.gap),
                                       child: CustomList(
                                         title: term.name,
                                         subtitle: 'يحتوي على 5 مواد دراسية',
